@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Online - LaTeX to Quiz Converter</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="quiz-page">
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-calculator"></i>
+                <span>LaTeX Quiz Converter</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="quiz.html" class="nav-link active">
+                    <i class="fas fa-play"></i>
+                    Thi Online
+                </a>
+                <a href="results.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    Kết Quả
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Quiz Selection Screen -->
+    <div id="quizSelectionScreen" class="quiz-screen">
+        <div class="container">
+            <header class="page-header">
+                <h1>
+                    <i class="fas fa-play-circle"></i>
+                    Chọn Quiz để Thi
+                </h1>
+                <p>Chọn một quiz từ danh sách bên dưới để bắt đầu làm bài</p>
+            </header>
+
+            <div class="quiz-selection-grid" id="quizSelectionGrid">
+                <!-- Quiz cards will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Taking Screen -->
+    <div id="quizTakingScreen" class="quiz-screen" style="display: none;">
+        <div class="quiz-header">
+            <div class="quiz-info">
+                <h2 id="quizTitle">Quiz Title</h2>
+                <div class="quiz-meta">
+                    <span id="questionProgress">Câu 1/10</span>
+                    <span id="timeRemaining">30:00</span>
+                </div>
+            </div>
+            <div class="quiz-controls">
+                <button id="viewModeBtn" class="btn btn-secondary">
+                    <i class="fas fa-list"></i>
+                    Xem tất cả
+                </button>
+                <button id="pauseBtn" class="btn btn-secondary">
+                    <i class="fas fa-pause"></i>
+                    Tạm dừng
+                </button>
+                <button id="submitQuizBtn" class="btn btn-danger">
+                    <i class="fas fa-flag-checkered"></i>
+                    Nộp bài
+                </button>
+            </div>
+        </div>
+
+        <div class="quiz-content">
+            <!-- Single Question View -->
+            <div class="question-container" id="singleQuestionContainer">
+                <div class="question-header">
+                    <span class="question-number" id="currentQuestionNumber">Câu 1</span>
+                    <div class="question-navigation">
+                        <button id="prevQuestionBtn" class="btn btn-sm btn-secondary" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                            Trước
+                        </button>
+                        <button id="nextQuestionBtn" class="btn btn-sm btn-primary">
+                            Sau
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="question-content">
+                    <div class="question-text" id="questionText">
+                        <!-- Question content will be loaded here -->
+                    </div>
+
+                    <div class="question-choices" id="questionChoices">
+                        <!-- Choices will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- All Questions View -->
+            <div class="all-questions-container" id="allQuestionsContainer" style="display: none;">
+                <div class="all-questions-header">
+                    <h3>
+                        <i class="fas fa-list"></i>
+                        Tất cả câu hỏi
+                    </h3>
+                    <p>Cuộn xuống để xem tất cả câu hỏi. Click vào đáp án để chọn.</p>
+                </div>
+                <div class="all-questions-content" id="allQuestionsContent">
+                    <!-- All questions will be loaded here -->
+                </div>
+            </div>
+
+            <div class="quiz-sidebar">
+                <div class="question-grid" id="questionGrid">
+                    <!-- Question grid will be loaded here -->
+                </div>
+
+                <div class="quiz-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Đã làm:</span>
+                        <span class="stat-value" id="answeredCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Còn lại:</span>
+                        <span class="stat-value" id="remainingCount">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Result Screen -->
+    <div id="quizResultScreen" class="quiz-screen" style="display: none;">
+        <div class="container">
+            <div class="result-container">
+                <div class="result-header">
+                    <div class="result-icon">
+                        <i class="fas fa-trophy" id="resultIcon"></i>
+                    </div>
+                    <h1 id="resultTitle">Hoàn thành Quiz!</h1>
+                    <p id="resultSubtitle">Bạn đã hoàn thành bài thi</p>
+                </div>
+
+                <div class="result-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="finalScore">0</div>
+                        <div class="stat-label">Điểm số</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="finalPercentage">0%</div>
+                        <div class="stat-label">Tỷ lệ đúng</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="finalCorrect">0/0</div>
+                        <div class="stat-label">Câu đúng</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="finalTime">00:00</div>
+                        <div class="stat-label">Thời gian</div>
+                    </div>
+                </div>
+
+                <div class="result-details" id="resultDetails">
+                    <!-- Detailed results will be shown here -->
+                </div>
+
+                <div class="result-actions">
+                    <button id="reviewAnswersBtn" class="btn btn-primary">
+                        <i class="fas fa-eye"></i>
+                        Xem đáp án
+                    </button>
+                    <button id="retakeQuizBtn" class="btn btn-secondary">
+                        <i class="fas fa-redo"></i>
+                        Làm lại
+                    </button>
+                    <button id="backToSelectionBtn" class="btn btn-secondary">
+                        <i class="fas fa-list"></i>
+                        Chọn quiz khác
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pause Modal -->
+    <div id="pauseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-pause-circle"></i>
+                    Quiz đã tạm dừng
+                </h3>
+            </div>
+            <div class="modal-body">
+                <p>Bài thi đã được tạm dừng. Thời gian sẽ không chạy khi bạn tạm dừng.</p>
+                <div class="pause-stats">
+                    <div class="pause-stat">
+                        <span>Câu đã làm:</span>
+                        <span id="pauseAnsweredCount">0</span>
+                    </div>
+                    <div class="pause-stat">
+                        <span>Thời gian còn lại:</span>
+                        <span id="pauseTimeRemaining">00:00</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="resumeQuizBtn" class="btn btn-primary">
+                    <i class="fas fa-play"></i>
+                    Tiếp tục
+                </button>
+                <button id="quitQuizBtn" class="btn btn-danger">
+                    <i class="fas fa-times"></i>
+                    Thoát quiz
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Confirmation Modal -->
+    <div id="submitModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <i class="fas fa-flag-checkered"></i>
+                    Xác nhận nộp bài
+                </h3>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn nộp bài không?</p>
+                <div class="submit-warning">
+                    <div class="warning-item">
+                        <span>Câu đã làm:</span>
+                        <span id="submitAnsweredCount">0</span>
+                    </div>
+                    <div class="warning-item">
+                        <span>Câu chưa làm:</span>
+                        <span id="submitRemainingCount">0</span>
+                    </div>
+                </div>
+                <p class="warning-text">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Sau khi nộp bài, bạn không thể thay đổi đáp án!
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelSubmitBtn" class="btn btn-secondary">
+                    <i class="fas fa-times"></i>
+                    Hủy
+                </button>
+                <button id="confirmSubmitBtn" class="btn btn-danger">
+                    <i class="fas fa-check"></i>
+                    Nộp bài
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Đang tải quiz...</p>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true,
+                packages: {'[+]': ['ams', 'newcommand', 'configmacros']}
+            },
+            svg: {
+                fontCache: 'global'
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            startup: {
+                ready: () => {
+                    console.log('MathJax is loaded and ready in Quiz');
+                    MathJax.startup.defaultReady();
+                }
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+    <script src="js/latex-parser.js"></script>
+    <script src="js/quiz-manager.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/quiz.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+\begin{ex} % Câu 1
+Cho khối chóp $O.ABC$ có $OA$ vuông góc với mặt phẳng $\left( {ABC} \right)$, tam giác $ABC$ vuông tại $A$ và $OA = 2$, $AB = 3$, $AC = 6$. Thể tích của khối chóp $O.ABC$ bằng.
+\choice
+    {$36$}
+    {\True $6$}
+    {$12$}
+    {$18$}
+\loigiai{$V = \dfrac{1}{3}OA.{S_{ABC}} = \dfrac{1}{3}OA.\dfrac{1}{2}.AB.AC = \dfrac{1}{6}.2.3.6 = 6$}
+\end{ex}
+
+\begin{ex} % Câu 2
+Tính đạo hàm của hàm số $f(x) = x^3 + 2x^2 - 5x + 1$.
+\choice
+    {$f'(x) = 3x^2 + 2x - 5$}
+    {\True $f'(x) = 3x^2 + 4x - 5$}
+    {$f'(x) = x^2 + 4x - 5$}
+    {$f'(x) = 3x^3 + 4x^2 - 5x$}
+\loigiai{Áp dụng quy tắc đạo hàm: $f'(x) = 3x^2 + 4x - 5$}
+\end{ex}
+
+\begin{ex} % Câu 3
+Giải phương trình $\sqrt{x + 1} = 3$.
+\choice
+    {$x = 8$}
+    {$x = 10$}
+    {\True $x = 8$}
+    {$x = 9$}
+\loigiai{$\sqrt{x + 1} = 3 \Rightarrow x + 1 = 9 \Rightarrow x = 8$}
+\end{ex}
+
+\begin{ex} % Câu 4
+Tính tích phân $\int_0^1 x^2 dx$.
+\choice
+    {$\dfrac{1}{2}$}
+    {\True $\dfrac{1}{3}$}
+    {$\dfrac{2}{3}$}
+    {$1$}
+\loigiai{$\int_0^1 x^2 dx = \left[\dfrac{x^3}{3}\right]_0^1 = \dfrac{1}{3} - 0 = \dfrac{1}{3}$}
+\end{ex}
+
+\begin{ex} % Câu 5
+Cho hàm số $y = \sin(2x + \dfrac{\pi}{3})$. Chu kì của hàm số là:
+\choice
+    {$2\pi$}
+    {\True $\pi$}
+    {$\dfrac{\pi}{2}$}
+    {$\dfrac{\pi}{3}$}
+\loigiai{Chu kì của hàm số $y = \sin(ax + b)$ là $T = \dfrac{2\pi}{|a|} = \dfrac{2\pi}{2} = \pi$}
+\end{ex}
+
+\begin{ex} % Câu 6
+Trong không gian $Oxyz$, cho điểm $A(1, 2, 3)$ và $B(4, 5, 6)$. Độ dài đoạn thẳng $AB$ là:
+\choice
+    {$3\sqrt{3}$}
+    {$\sqrt{27}$}
+    {\True $3\sqrt{3}$}
+    {$9$}
+\loigiai{$AB = \sqrt{(4-1)^2 + (5-2)^2 + (6-3)^2} = \sqrt{9 + 9 + 9} = \sqrt{27} = 3\sqrt{3}$}
+\end{ex}
+
+\begin{ex} % Câu 7
+Giải bất phương trình $2x - 3 > 5$.
+\choice
+    {$x > 4$}
+    {$x < 4$}
+    {\True $x > 4$}
+    {$x \geq 4$}
+\loigiai{$2x - 3 > 5 \Rightarrow 2x > 8 \Rightarrow x > 4$}
+\end{ex}
+
+\begin{ex} % Câu 8
+Cho ma trận $A = \begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix}$. Định thức của ma trận $A$ là:
+\choice
+    {$10$}
+    {$-2$}
+    {\True $-2$}
+    {$2$}
+\loigiai{$\det(A) = 1 \cdot 4 - 2 \cdot 3 = 4 - 6 = -2$}
+\end{ex}
+
+\begin{ex} % Câu 9
+Tìm giới hạn $\lim_{x \to 0} \dfrac{\sin x}{x}$.
+\choice
+    {$0$}
+    {\True $1$}
+    {$\infty$}
+    {Không tồn tại}
+\loigiai{Đây là giới hạn cơ bản: $\lim_{x \to 0} \dfrac{\sin x}{x} = 1$}
+\end{ex}
+
+\begin{ex} % Câu 10
+Cho số phức $z = 3 + 4i$. Môđun của số phức $z$ là:
+\choice
+    {$7$}
+    {$\sqrt{7}$}
+    {\True $5$}
+    {$25$}
+\loigiai{$|z| = \sqrt{3^2 + 4^2} = \sqrt{9 + 16} = \sqrt{25} = 5$}
+\end{ex}
+
+\begin{ex} % Câu 11
+Đối với ngành nuôi trồng thủy sản, việc kiểm soát lượng thuốc tồn dư trong nước là một nhiệm vụ quan trọng nhằm đáp ứng các tiêu chuẩn an toàn về môi trường. Khi nghiên cứu một loại thuốc trị bệnh trong nuôi trồng thủy sản, người ta sử dụng thuốc đó một lần và theo dõi nồng độ thuốc tồn dư trong nước kể từ lúc sử dụng thuốc. Kết quả cho thấy nồng độ thuốc $y\left( t \right)$ (đơn vị: mg/lít) tồn dư trong nước tại thời điểm $t$ ngày ($t \geqslant 0$) kể từ lúc sử dụng thuốc, thỏa mãn $y\left( t \right) > 0$ và $y'\left( t \right) = k.y\left( t \right)$ ($t \geqslant 0$), trong đó $k$ là hằng số khác không. Đo nồng độ thuốc tồn dư trong nước tại các thời điểm $t = 6$ (ngày); $t = 12$ (ngày) nhận được kết quả lần lượt là 2 mg/lít; 1 mg/lít. Cho biết $y\left( t \right) = {e^{g\left( t \right)}}$ ($t \geqslant 0$).
+\choiceTF
+    {\True $g\left( t \right) = kt + C$ ($t \geqslant 0$) với $C$ là một hằng số xác định}
+    {\True $k =  - \dfrac{{\ln 2}}{6}$}
+    {$C = 4\ln 2$}
+    {Nồng độ thuốc tồn dư trong nước tại thời điểm $t = 21$ (ngày) kể từ lúc sử dụng thuốc lớn hơn $0,4$ mg/lít}
+\loigiai{
+\begin{itemchoice}
+    \itemch Đúng\\
+Ta có: $y'\left( t \right) = k.y\left( t \right)$ $\Rightarrow \dfrac{{y'\left( t \right)}}{{y\left( t \right)}} = k$ $\Rightarrow \displaystyle\int\limits {\dfrac{{y'\left( t \right)}}{{y\left( t \right)}}dt = \displaystyle\int\limits {kdt} }$ \\
+$\Rightarrow \ln \left( {y\left( t \right)} \right) = k.t + C$ $\Rightarrow y\left( t \right) = {e^{k.t + C}}$. Do đó $g\left( t \right) = k.t + C$
+    \itemch Đúng\\
+Theo giả thiết ta có: $\left\{ \begin{gathered}
+y\left( 6 \right) = 2 \hfill \\
+y\left( {12} \right) = 1 \hfill \\
+\end{gathered}  \right. \Rightarrow \left\{ \begin{gathered}
+2 = {e^{6k + C}} \hfill \\
+1 = {e^{12k + C}} \hfill \\
+\end{gathered}  \right. \Rightarrow \left\{ \begin{gathered}
+6k + C = \ln 2 \hfill \\
+12k + C = 0 \hfill \\
+\end{gathered}  \right. \Rightarrow \left\{ \begin{gathered}
+k =  - \dfrac{{\ln 2}}{6} \hfill \\
+C = 2\ln 2 \hfill \\
+\end{gathered}  \right.$
+    \itemch Sai\\
+$C = 2\ln 2$
+    \itemch Sai\\
+Vậy $y\left( t \right) = {e^{ - \dfrac{{\ln 2}}{6}t + 2\ln 2}}$, $g\left( t \right) =  - \dfrac{{\ln 2}}{6}t + 2\ln 2$.\\
+Với $t = 21$ ta có $y\left( {21} \right) = {e^{ - \dfrac{{\ln 2}}{6}.21 + 2\ln 2}} = \dfrac{{\sqrt 2 }}{4} < 0,4$ mg/lít.
+\end{itemchoice}
+}
+\end{ex}
+
+\begin{ex} % Câu 12
+Cho hàm số $f(x) = x^3 - 3x^2 + 2$. Xét tính đúng sai của các khẳng định sau:
+\choiceTF
+    {\True Hàm số có hai điểm cực trị}
+    {Hàm số đồng biến trên khoảng $(0; 2)$}
+    {\True Giá trị cực đại của hàm số là $2$}
+    {Đồ thị hàm số cắt trục hoành tại ba điểm phân biệt}
+\loigiai{
+a) Đúng. $f'(x) = 3x^2 - 6x = 3x(x - 2)$. $f'(x) = 0 \Leftrightarrow x = 0$ hoặc $x = 2$. Hàm số có hai điểm cực trị.
+
+b) Sai. $f'(x) < 0$ khi $x \in (0; 2)$, nên hàm số nghịch biến trên khoảng này.
+
+c) Đúng. $f(0) = 2$ là giá trị cực đại, $f(2) = -2$ là giá trị cực tiểu.
+
+d) Sai. Phương trình $x^3 - 3x^2 + 2 = 0$ có nghiệm $x = 1$ (nghiệm kép) và $x = 2$, tức là chỉ có 2 điểm cắt trục hoành.
+}
+\end{ex}
+
+\begin{ex} % Câu 13
+Bạn Nam tham gia một cuộc thi giải một mật thư. Theo quy tắc của cuộc thi, người chơi cần chọn ra sáu số từ tập $S = \{41; 42; 43; 44; 45; 46; 47; 48; 49\}$ và xếp mỗi số vào đúng một vị trí trong sáu vị trí $A$, $B$, $C$, $M$, $N$, $P$ sao cho mỗi vị trí chỉ được xếp một số. Biết rằng tổng các số ở vị trí $A$, $B$, $C$ phải là số lẻ và tổng các số ở vị trí $M$, $N$, $P$ cũng phải là số lẻ. Hỏi có bao nhiêu cách xếp thỏa mãn điều kiện?
+\shortans[oly]{5040}
+\loigiai{
+Tập $S$ có $5$ số lẻ $\{41; 43; 45; 47; 49\}$ và $4$ số chẵn $\{42; 44; 46; 48\}$.
+
+Để tổng $A + B + C$ là số lẻ, cần có số lẻ các số lẻ trong $\{A, B, C\}$.
+Để tổng $M + N + P$ là số lẻ, cần có số lẻ các số lẻ trong $\{M, N, P\}$.
+
+Vì tổng cộng có $5$ số lẻ và cần phân bố vào $6$ vị trí sao cho mỗi nhóm $3$ vị trí có số lẻ các số lẻ, ta có các trường hợp:
+- Nhóm $\{A, B, C\}$: $1$ số lẻ, nhóm $\{M, N, P\}$: $1$ số lẻ (còn lại $3$ số lẻ không dùng)
+- Nhóm $\{A, B, C\}$: $3$ số lẻ, nhóm $\{M, N, P\}$: $1$ số lẻ (còn lại $1$ số lẻ không dùng)
+- Nhóm $\{A, B, C\}$: $1$ số lẻ, nhóm $\{M, N, P\}$: $3$ số lẻ (còn lại $1$ số lẻ không dùng)
+
+Tính toán chi tiết cho từng trường hợp và cộng lại ta được $5040$ cách.
+}
+\end{ex}
+
+\begin{ex} % Câu 14
+Cho đồ thị hàm số $y = \sqrt{x^2 - 4x + 3}$ có các đường tiệm cận xiên $d_1$ và $d_2$. Tìm tổng khoảng cách từ gốc tọa độ đến hai đường tiệm cận xiên $d_1$, $d_2$ (kết quả được làm tròn đến hàng phần trăm).
+\shortans[oly]{2.83}
+\loigiai{
+Điều kiện xác định hàm số là $x^2 - 4x + 3 \geq 0 \Leftrightarrow \begin{cases} x \leq 1 \\ x \geq 3 \end{cases}$
+
+Xét $\lim_{x \to +\infty} \frac{\sqrt{x^2 - 4x + 3}}{x}$. Do đó $d_1: y = x - 2$ hay $d_1: x - y - 2 = 0$ là một đường tiệm cận xiên của đồ thị hàm số.
+
+Xét $\lim_{x \to -\infty} \frac{\sqrt{x^2 - 4x + 3}}{x}$. Do đó $d_2: y = -x + 2$ hay $d_2: x + y - 2 = 0$ là một đường tiệm cận xiên của đồ thị hàm số.
+
+Khoảng cách từ $O(0;0)$ đến $d_1$: $d(O, d_1) = \frac{|0 - 0 - 2|}{\sqrt{1^2 + (-1)^2}} = \frac{2}{\sqrt{2}} = \sqrt{2}$
+
+Khoảng cách từ $O(0;0)$ đến $d_2$: $d(O, d_2) = \frac{|0 + 0 - 2|}{\sqrt{1^2 + 1^2}} = \frac{2}{\sqrt{2}} = \sqrt{2}$
+
+Tổng khoảng cách: $\sqrt{2} + \sqrt{2} = 2\sqrt{2} \approx 2.83$
+}
+\end{ex}
+
+\begin{ex} % Câu 15
+Quan sát hình vẽ dưới đây và cho biết diện tích hình tròn có bán kính $r = 3$ cm.
+
+<img src="https://booktoan.com/wp-content/uploads/2025/06/image-27.png" />
+
+\choice
+    {$6\pi$ cm²}
+    {\True $9\pi$ cm²}
+    {$12\pi$ cm²}
+    {$18\pi$ cm²}
+\loigiai{Diện tích hình tròn có bán kính $r = 3$ cm là $S = \pi r^2 = \pi \cdot 3^2 = 9\pi$ cm².}
+\end{ex}

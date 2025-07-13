@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết Quả Thi - LaTeX to Quiz Converter</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-calculator"></i>
+                <span>LaTeX Quiz Converter</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="quiz.html" class="nav-link">
+                    <i class="fas fa-play"></i>
+                    Thi Online
+                </a>
+                <a href="results.html" class="nav-link active">
+                    <i class="fas fa-chart-bar"></i>
+                    Kết Quả
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>
+                <i class="fas fa-chart-line"></i>
+                Kết Quả Thi
+            </h1>
+            <p>Xem lại các kết quả thi và thống kê</p>
+        </header>
+
+        <!-- Statistics Overview -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="totalAttempts">0</div>
+                    <div class="stat-label">Lượt thi</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="averageScore">0%</div>
+                    <div class="stat-label">Điểm trung bình</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="bestScore">0%</div>
+                    <div class="stat-label">Điểm cao nhất</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="totalTime">0h 0m</div>
+                    <div class="stat-label">Tổng thời gian</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters and Controls -->
+        <div class="results-controls">
+            <div class="filters">
+                <select id="quizFilter" class="filter-select">
+                    <option value="">Tất cả quiz</option>
+                </select>
+                <select id="sortFilter" class="filter-select">
+                    <option value="date-desc">Mới nhất</option>
+                    <option value="date-asc">Cũ nhất</option>
+                    <option value="score-desc">Điểm cao nhất</option>
+                    <option value="score-asc">Điểm thấp nhất</option>
+                </select>
+            </div>
+            <div class="controls">
+                <button id="exportBtn" class="btn btn-secondary">
+                    <i class="fas fa-download"></i>
+                    Xuất dữ liệu
+                </button>
+                <button id="clearResultsBtn" class="btn btn-danger">
+                    <i class="fas fa-trash"></i>
+                    Xóa tất cả
+                </button>
+            </div>
+        </div>
+
+        <!-- Results List -->
+        <div class="results-section">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>
+                        <i class="fas fa-list"></i>
+                        Lịch Sử Thi
+                    </h2>
+                    <div class="panel-actions">
+                        <button id="refreshResultsBtn" class="btn btn-secondary">
+                            <i class="fas fa-refresh"></i>
+                            Làm mới
+                        </button>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div id="resultsList" class="results-list">
+                        <!-- Results will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Chart Section -->
+        <div class="chart-section">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>
+                        <i class="fas fa-chart-area"></i>
+                        Biểu Đồ Tiến Bộ
+                    </h2>
+                </div>
+                <div class="panel-body">
+                    <div id="performanceChart" class="chart-container">
+                        <canvas id="chartCanvas" width="800" height="400"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Detail Modal -->
+    <div id="resultDetailModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3 id="modalTitle">Chi Tiết Kết Quả</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="resultDetailContent">
+                    <!-- Detailed result content will be loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="retakeFromResultBtn" class="btn btn-primary">
+                    <i class="fas fa-redo"></i>
+                    Làm lại quiz
+                </button>
+                <button class="btn btn-secondary" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="exportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Xuất Dữ Liệu</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="export-options">
+                    <div class="export-option">
+                        <input type="radio" id="exportJSON" name="exportFormat" value="json" checked>
+                        <label for="exportJSON">
+                            <i class="fas fa-code"></i>
+                            JSON (Dữ liệu thô)
+                        </label>
+                    </div>
+                    <div class="export-option">
+                        <input type="radio" id="exportCSV" name="exportFormat" value="csv">
+                        <label for="exportCSV">
+                            <i class="fas fa-table"></i>
+                            CSV (Excel)
+                        </label>
+                    </div>
+                    <div class="export-option">
+                        <input type="radio" id="exportTXT" name="exportFormat" value="txt">
+                        <label for="exportTXT">
+                            <i class="fas fa-file-alt"></i>
+                            TXT (Văn bản)
+                        </label>
+                    </div>
+                </div>
+                <div class="export-settings">
+                    <label>
+                        <input type="checkbox" id="includeAnswers" checked>
+                        Bao gồm chi tiết đáp án
+                    </label>
+                    <label>
+                        <input type="checkbox" id="includeQuestions" checked>
+                        Bao gồm nội dung câu hỏi
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Hủy</button>
+                <button id="confirmExportBtn" class="btn btn-primary">
+                    <i class="fas fa-download"></i>
+                    Xuất file
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Đang tải dữ liệu...</p>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/latex-parser.js"></script>
+    <script src="js/quiz-manager.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/results.js"></script>
+</body>
+</html>
