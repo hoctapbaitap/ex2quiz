@@ -132,7 +132,8 @@ class QuizApp {
             }
 
             // Configure MathJax
-            window.MathJax = {
+            // Shuffle questions by type to maintain variety
+            this.questions = this.shuffleQuestionsByType([...quiz.questions]);
                 tex: {
                     inlineMath: [['$', '$'], ['\\(', '\\)']],
                     displayMath: [['$$', '$$'], ['\\[', '\\]']],
