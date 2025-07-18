@@ -229,9 +229,14 @@ class LaTeXParser {
         }
 
         let explanation = loigiaiMatch[1].trim();
+        
+        // Preserve line breaks and formatting
+        explanation = explanation
+            .replace(/\\\\/g, '\n')  // Convert \\ to line breaks
+            .replace(/\\n/g, '\n')   // Convert \n to line breaks
+            .replace(/\n\s*\n/g, '\n\n') // Normalize multiple line breaks
+            .trim();
 
-        // For true-false questions, just return the entire explanation
-        // The complex itemchoice processing is not needed for display
         return explanation;
     }
 

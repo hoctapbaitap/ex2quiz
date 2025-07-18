@@ -1259,7 +1259,7 @@ class QuizApp {
                         ${question.explanation ? `
                             <div class="explanation">
                                 <strong>Lời giải:</strong> ${question.explanation}
-                            </div>
+                                <div style="white-space: pre-line;">${question.explanation}</div>
                         ` : ''}
                     </div>
                 </div>
