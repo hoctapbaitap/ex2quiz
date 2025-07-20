@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - LaTeX to Quiz Converter</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <i class="fas fa-shield-alt"></i>
+                <h1>Admin Dashboard</h1>
+                <p>Vui lòng nhập mật khẩu để truy cập</p>
+            </div>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="adminPassword">Mật khẩu:</label>
+                    <input type="password" id="adminPassword" placeholder="Nhập mật khẩu admin..." required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Đăng nhập
+                </button>
+            </form>
+            <div class="login-footer">
+                <a href="index.html" class="btn btn-secondary">
+                    <i class="fas fa-home"></i>
+                    Về trang chủ
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard (Hidden initially) -->
+    <div id="adminDashboard" style="display: none;">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <i class="fas fa-calculator"></i>
+                    <span>LaTeX Quiz Converter - Admin</span>
+                </div>
+                <div class="nav-menu">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Trang chủ
+                    </a>
+                    <a href="admin.html" class="nav-link active">
+                        <i class="fas fa-cogs"></i>
+                        Admin
+                    </a>
+                    <a href="quiz.html" class="nav-link">
+                        <i class="fas fa-play"></i>
+                        Thi Online
+                    </a>
+                    <a href="results.html" class="nav-link">
+                        <i class="fas fa-chart-bar"></i>
+                        Kết Quả
+                    </a>
+                    <button id="logoutBtn" class="btn btn-danger btn-sm">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Đăng xuất
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <header class="page-header">
+                <h1>
+                    <i class="fas fa-cogs"></i>
+                    Admin Dashboard
+                </h1>
+                <p>Chuyển đổi LaTeX thành Quiz Online</p>
+            </header>
+
+            <div class="dashboard-grid">
+                <!-- LaTeX Input Panel -->
+                <div class="panel latex-panel">
+                    <div class="panel-header">
+                        <h2>
+                            <i class="fas fa-code"></i>
+                            LaTeX Input
+                        </h2>
+                        <div class="panel-actions">
+                            <button id="clearBtn" class="btn btn-secondary">
+                                <i class="fas fa-trash"></i>
+                                Xóa
+                            </button>
+                            <button id="loadSampleBtn" class="btn btn-primary">
+                                <i class="fas fa-file-import"></i>
+                                Mẫu
+                            </button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <textarea 
+                            id="latexInput" 
+                            placeholder="Dán LaTeX code vào đây...&#10;&#10;Ví dụ:&#10;\begin{ex}&#10;Câu hỏi của bạn...&#10;\choice&#10;    {Đáp án A}&#10;    {\True Đáp án B đúng}&#10;    {Đáp án C}&#10;    {Đáp án D}&#10;\loigiai{Lời giải...}&#10;\end{ex}"
+                        ></textarea>
+                        <div class="input-stats">
+                            <span id="charCount">0 ký tự</span>
+                            <span id="questionCount">0 câu hỏi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Panel -->
+                <div class="panel preview-panel">
+                    <div class="panel-header">
+                        <h2>
+                            <i class="fas fa-eye"></i>
+                            Preview Quiz
+                        </h2>
+                        <div class="panel-actions">
+                            <button id="convertBtn" class="btn btn-success">
+                                <i class="fas fa-sync-alt"></i>
+                                Convert
+                            </button>
+                            <button id="saveQuizBtn" class="btn btn-primary" disabled>
+                                <i class="fas fa-save"></i>
+                                Lưu Quiz
+                            </button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div id="previewContent" class="preview-content">
+                            <div class="empty-state">
+                                <i class="fas fa-file-alt"></i>
+                                <h3>Chưa có nội dung</h3>
+                                <p>Nhập LaTeX code và nhấn Convert để xem preview</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Management Section -->
+            <div class="quiz-management">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>
+                            <i class="fas fa-list"></i>
+                            Quản Lý Quiz
+                        </h2>
+                        <div class="panel-actions">
+                            <button id="exportDataBtn" class="btn btn-secondary">
+                                <i class="fas fa-download"></i>
+                                Export JSON
+                            </button>
+                            <button id="importDataBtn" class="btn btn-secondary">
+                                <i class="fas fa-upload"></i>
+                                Import JSON
+                            </button>
+                            <input type="file" id="importFileInput" accept=".json" style="display: none;">
+                            <button id="refreshQuizListBtn" class="btn btn-secondary">
+                                <i class="fas fa-refresh"></i>
+                                Làm mới
+                            </button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div id="quizList" class="quiz-list">
+                            <!-- Quiz items will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Quiz Modal -->
+        <div id="saveQuizModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Lưu Quiz</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="saveQuizForm">
+                        <div class="form-group">
+                            <label for="quizTitle">Tên Quiz:</label>
+                            <input type="text" id="quizTitle" required placeholder="Nhập tên quiz...">
+                        </div>
+                        <div class="form-group">
+                            <label for="quizDescription">Mô tả:</label>
+                            <textarea id="quizDescription" placeholder="Mô tả ngắn về quiz..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="quizDuration">Thời gian (phút):</label>
+                            <input type="number" id="quizDuration" min="1" max="180" value="30">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Hủy</button>
+                    <button type="submit" form="saveQuizForm" class="btn btn-primary">Lưu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Đang xử lý...</p>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toastContainer" class="toast-container"></div>
+
+        <!-- Share Quiz Modal -->
+        <div id="shareQuizModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Chia sẻ Quiz</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="share-info">
+                        <h4 id="shareQuizTitle">Tên Quiz</h4>
+                        <p id="shareQuizDescription">Mô tả quiz</p>
+                    </div>
+                    
+                    <div class="share-methods">
+                        <div class="share-method">
+                            <label>Link trực tiếp:</label>
+                            <div class="url-container">
+                                <input type="text" id="shareQuizUrl" readonly>
+                                <button class="btn btn-sm btn-secondary" onclick="dashboard.copyQuizUrl()">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="share-method">
+                            <label>QR Code:</label>
+                            <div id="qrCodeContainer" class="qr-container">
+                                <!-- QR code will be generated here -->
+                            </div>
+                        </div>
+                        
+                        <div class="share-method">
+                            <label>Chia sẻ qua:</label>
+                            <div class="social-share">
+                                <button class="btn btn-sm btn-success" onclick="dashboard.shareViaWhatsApp()">
+                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                </button>
+                                <button class="btn btn-sm btn-primary" onclick="dashboard.shareViaFacebook()">
+                                    <i class="fab fa-facebook"></i> Facebook
+                                </button>
+                                <button class="btn btn-sm btn-info" onclick="dashboard.shareViaTelegram()">
+                                    <i class="fab fa-telegram"></i> Telegram
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="dashboard.closeModal()">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/latex-parser.js"></script>
+    <script src="js/quiz-manager.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/dashboard.js"></script>
+    
+    <script>
+        // Admin authentication
+        class AdminAuth {
+            constructor() {
+                this.correctPassword = 'bHZkMTIzNDU2'; // Base64 encoded 'lvd123456'
+                this.sessionKey = 'admin-session';
+                this.init();
+            }
+
+            init() {
+                // Check if already logged in
+                if (this.isLoggedIn()) {
+                    this.showDashboard();
+                } else {
+                    this.showLogin();
+                }
+
+                // Bind events
+                document.getElementById('loginForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleLogin();
+                });
+
+                document.getElementById('logoutBtn').addEventListener('click', () => {
+                    this.handleLogout();
+                });
+            }
+
+            isLoggedIn() {
+                const session = sessionStorage.getItem(this.sessionKey);
+                return session === 'authenticated';
+            }
+
+            handleLogin() {
+                const password = document.getElementById('adminPassword').value;
+                const encodedPassword = btoa(password); // Simple Base64 encoding
+
+                if (encodedPassword === this.correctPassword) {
+                    sessionStorage.setItem(this.sessionKey, 'authenticated');
+                    this.showDashboard();
+                    this.showToast('Đăng nhập thành công!', 'success');
+                } else {
+                    this.showToast('Mật khẩu không đúng!', 'error');
+                    document.getElementById('adminPassword').value = '';
+                    document.getElementById('adminPassword').focus();
+                }
+            }
+
+            handleLogout() {
+                sessionStorage.removeItem(this.sessionKey);
+                this.showLogin();
+                this.showToast('Đã đăng xuất!', 'info');
+            }
+
+            showLogin() {
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('adminDashboard').style.display = 'none';
+                document.getElementById('adminPassword').focus();
+            }
+
+            showDashboard() {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+            }
+
+            showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                toast.innerHTML = `
+                    <i class="fas fa-${this.getToastIcon(type)}"></i>
+                    <span>${message}</span>
+                    <button class="toast-close">&times;</button>
+                `;
+
+                let container = document.getElementById('toastContainer');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.id = 'toastContainer';
+                    container.className = 'toast-container';
+                    document.body.appendChild(container);
+                }
+                
+                container.appendChild(toast);
+
+                // Auto remove after 3 seconds
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.remove();
+                    }
+                }, 3000);
+
+                // Manual close
+                toast.querySelector('.toast-close').addEventListener('click', () => {
+                    toast.remove();
+                });
+            }
+
+            getToastIcon(type) {
+                const icons = {
+                    success: 'check-circle',
+                    error: 'exclamation-circle',
+                    warning: 'exclamation-triangle',
+                    info: 'info-circle'
+                };
+                return icons[type] || 'info-circle';
+            }
+        }
+
+        // Initialize admin authentication
+        document.addEventListener('DOMContentLoaded', () => {
+            window.adminAuth = new AdminAuth();
+        });
+    </script>
+</body>
+</html>

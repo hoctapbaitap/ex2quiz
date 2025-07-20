@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LaTeX to Quiz Converter</title>
+    <title>LaTeX to Quiz Converter - Tạo Quiz Online từ LaTeX</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="home-page">
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -18,7 +18,11 @@
             <div class="nav-menu">
                 <a href="index.html" class="nav-link active">
                     <i class="fas fa-home"></i>
-                    Dashboard
+                    Trang chủ
+                </a>
+                <a href="admin.html" class="nav-link">
+                    <i class="fas fa-cogs"></i>
+                    Admin
                 </a>
                 <a href="quiz.html" class="nav-link">
                     <i class="fas fa-play"></i>
@@ -28,236 +32,487 @@
                     <i class="fas fa-chart-bar"></i>
                     Kết Quả
                 </a>
+                <a href="latex2doc.html" class="nav-link">
+                    <i class="fas fa-file-alt"></i>
+                    LaTeX to Doc
+                </a>
             </div>
         </div>
     </nav>
 
-    <div class="container">
-        <header class="page-header">
-            <h1>
-                <i class="fas fa-cogs"></i>
-                Admin Dashboard
-            </h1>
-            <p>Chuyển đổi LaTeX thành Quiz Online</p>
-        </header>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <i class="fas fa-magic"></i>
+                    LaTeX to Quiz Converter
+                </h1>
+                <p class="hero-subtitle">
+                    Chuyển đổi LaTeX thành Quiz Online tương tác một cách dễ dàng và nhanh chóng
+                </p>
+                <div class="hero-buttons">
+                    <a href="admin.html" class="btn btn-primary btn-large">
+                        <i class="fas fa-plus-circle"></i>
+                        Tạo Quiz Mới
+                    </a>
+                    <a href="quiz.html" class="btn btn-secondary btn-large">
+                        <i class="fas fa-play"></i>
+                        Làm Bài Thi
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-demo">
+                    <div class="demo-latex">
+                        <h4><i class="fas fa-code"></i> LaTeX Input</h4>
+                        <pre><code>\begin{ex}
+Tính đạo hàm của $f(x) = x^2 + 3x$
+\choice
+    {$f'(x) = x + 3$}
+    {\True $f'(x) = 2x + 3$}
+    {$f'(x) = 2x$}
+\loigiai{Áp dụng quy tắc đạo hàm}
+\end{ex}</code></pre>
+                    </div>
+                    <div class="demo-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="demo-quiz">
+                        <h4><i class="fas fa-clipboard-list"></i> Quiz Online</h4>
+                        <div class="demo-question">
+                            <p><strong>Câu 1:</strong> Tính đạo hàm của f(x) = x² + 3x</p>
+                            <div class="demo-choices">
+                                <label><input type="radio" name="demo"> A. f'(x) = x + 3</label>
+                                <label><input type="radio" name="demo" checked> B. f'(x) = 2x + 3</label>
+                                <label><input type="radio" name="demo"> C. f'(x) = 2x</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <div class="dashboard-grid">
-            <!-- LaTeX Input Panel -->
-            <div class="panel latex-panel">
-                <div class="panel-header">
-                    <h2>
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-star"></i>
+                Tính Năng Nổi Bật
+            </h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
                         <i class="fas fa-code"></i>
-                        LaTeX Input
-                    </h2>
-                    <div class="panel-actions">
-                        <button id="clearBtn" class="btn btn-secondary">
-                            <i class="fas fa-trash"></i>
-                            Xóa
-                        </button>
-                        <button id="loadSampleBtn" class="btn btn-primary">
-                            <i class="fas fa-file-import"></i>
-                            Mẫu
-                        </button>
                     </div>
+                    <h3>LaTeX Parser</h3>
+                    <p>Chuyển đổi format <code>\begin{ex}...\end{ex}</code> thành quiz online với đầy đủ validation và error handling.</p>
                 </div>
-                <div class="panel-body">
-                    <textarea 
-                        id="latexInput" 
-                        placeholder="Dán LaTeX code vào đây...&#10;&#10;Ví dụ:&#10;\begin{ex}&#10;Câu hỏi của bạn...&#10;\choice&#10;    {Đáp án A}&#10;    {\True Đáp án B đúng}&#10;    {Đáp án C}&#10;    {Đáp án D}&#10;\loigiai{Lời giải...}&#10;\end{ex}"
-                    ></textarea>
-                    <div class="input-stats">
-                        <span id="charCount">0 ký tự</span>
-                        <span id="questionCount">0 câu hỏi</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Preview Panel -->
-            <div class="panel preview-panel">
-                <div class="panel-header">
-                    <h2>
+                <div class="feature-card">
+                    <div class="feature-icon">
                         <i class="fas fa-eye"></i>
-                        Preview Quiz
-                    </h2>
-                    <div class="panel-actions">
-                        <button id="convertBtn" class="btn btn-success">
-                            <i class="fas fa-sync-alt"></i>
-                            Convert
-                        </button>
-                        <button id="saveQuizBtn" class="btn btn-primary" disabled>
-                            <i class="fas fa-save"></i>
-                            Lưu Quiz
-                        </button>
                     </div>
+                    <h3>Live Preview</h3>
+                    <p>Xem trước câu hỏi được convert real-time với MathJax rendering cho công thức toán học.</p>
                 </div>
-                <div class="panel-body">
-                    <div id="previewContent" class="preview-content">
-                        <div class="empty-state">
-                            <i class="fas fa-file-alt"></i>
-                            <h3>Chưa có nội dung</h3>
-                            <p>Nhập LaTeX code và nhấn Convert để xem preview</p>
-                        </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
                     </div>
+                    <h3>Timer & Auto-save</h3>
+                    <p>Đếm ngược thời gian thi với cảnh báo và tự động lưu đáp án để tránh mất dữ liệu.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-random"></i>
+                    </div>
+                    <h3>Trộn Câu Hỏi</h3>
+                    <p>Tự động trộn câu hỏi và đáp án theo loại để tăng tính ngẫu nhiên và công bằng.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Thống Kê Chi Tiết</h3>
+                    <p>Xem chi tiết từng câu trả lời, biểu đồ tiến bộ và xuất kết quả ra nhiều định dạng.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <h3>Chia Sẻ Dễ Dàng</h3>
+                    <p>Tạo link chia sẻ, QR code và chia sẻ qua WhatsApp, Facebook, Telegram một cách nhanh chóng.</p>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Quiz Management Section -->
-        <div class="quiz-management">
-            <div class="panel">
-                <div class="panel-header">
-                    <h2>
+    <!-- Question Types Section -->
+    <section class="question-types">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-question-circle"></i>
+                Các Loại Câu Hỏi Hỗ Trợ
+            </h2>
+            <div class="types-grid">
+                <div class="type-card">
+                    <div class="type-header">
                         <i class="fas fa-list"></i>
-                        Quản Lý Quiz
-                    </h2>
-                    <div class="panel-actions">
-                        <button id="exportDataBtn" class="btn btn-secondary">
-                            <i class="fas fa-download"></i>
-                            Export JSON
-                        </button>
-                        <button id="importDataBtn" class="btn btn-secondary">
-                            <i class="fas fa-upload"></i>
-                            Import JSON
-                        </button>
-                        <input type="file" id="importFileInput" accept=".json" style="display: none;">
-                        <button id="refreshQuizListBtn" class="btn btn-secondary">
-                            <i class="fas fa-refresh"></i>
-                            Làm mới
-                        </button>
+                        <h3>Trắc Nghiệm</h3>
+                    </div>
+                    <div class="type-example">
+                        <pre><code>\begin{ex}
+Câu hỏi trắc nghiệm...
+\choice
+    {Đáp án A}
+    {\True Đáp án B đúng}
+    {Đáp án C}
+    {Đáp án D}
+\loigiai{Lời giải...}
+\end{ex}</code></pre>
                     </div>
                 </div>
-                <div class="panel-body">
-                    <div id="quizList" class="quiz-list">
-                        <!-- Quiz items will be loaded here -->
+                <div class="type-card">
+                    <div class="type-header">
+                        <i class="fas fa-check-square"></i>
+                        <h3>Đúng - Sai</h3>
+                    </div>
+                    <div class="type-example">
+                        <pre><code>\begin{ex}
+Xét tính đúng sai...
+\choiceTF
+    {\True Mệnh đề đúng}
+    {Mệnh đề sai}
+    {\True Mệnh đề đúng}
+\loigiai{Giải thích...}
+\end{ex}</code></pre>
+                    </div>
+                </div>
+                <div class="type-card">
+                    <div class="type-header">
+                        <i class="fas fa-edit"></i>
+                        <h3>Trả Lời Ngắn</h3>
+                    </div>
+                    <div class="type-example">
+                        <pre><code>\begin{ex}
+Tính tích phân...
+\shortans{$\frac{1}{3}$}
+\loigiai{Áp dụng công thức...}
+\end{ex}</code></pre>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Save Quiz Modal -->
-    <div id="saveQuizModal" class="modal">
-        <div class="modal-content">
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-cogs"></i>
+                Cách Sử Dụng
+            </h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Tạo LaTeX</h3>
+                        <p>Viết câu hỏi theo format LaTeX với <code>\begin{ex}...\end{ex}</code></p>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Convert & Preview</h3>
+                        <p>Nhấn Convert để chuyển đổi và xem preview quiz real-time</p>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Lưu & Chia Sẻ</h3>
+                        <p>Lưu quiz và chia sẻ link cho học sinh làm bài online</p>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Xem Kết Quả</h3>
+                        <p>Theo dõi kết quả và thống kê chi tiết của từng học sinh</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions Section -->
+    <section class="quick-actions">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-rocket"></i>
+                Bắt Đầu Ngay
+            </h2>
+            <div class="actions-grid">
+                <a href="admin.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <h3>Tạo Quiz Mới</h3>
+                    <p>Truy cập Admin Dashboard để tạo quiz từ LaTeX</p>
+                    <span class="action-arrow">→</span>
+                </a>
+                <a href="quiz.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                    <h3>Làm Bài Thi</h3>
+                    <p>Chọn quiz và bắt đầu làm bài online ngay</p>
+                    <span class="action-arrow">→</span>
+                </a>
+                <a href="results.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Xem Kết Quả</h3>
+                    <p>Theo dõi điểm số và thống kê chi tiết</p>
+                    <span class="action-arrow">→</span>
+                </a>
+                <a href="latex2doc.html" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-file-text"></i>
+                    </div>
+                    <h3>LaTeX to Doc</h3>
+                    <p>Chuyển đổi LaTeX thành văn bản thuần</p>
+                    <span class="action-arrow">→</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>LaTeX Quiz Converter</h4>
+                    <p>Công cụ chuyển đổi LaTeX thành Quiz Online tương tác, dành cho giáo viên và học sinh.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Tính Năng</h4>
+                    <ul>
+                        <li>LaTeX Parser</li>
+                        <li>Quiz Online</li>
+                        <li>Thống Kê</li>
+                        <li>Chia Sẻ</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Liên Kết</h4>
+                    <ul>
+                        <li><a href="admin.html">Admin Dashboard</a></li>
+                        <li><a href="quiz.html">Thi Online</a></li>
+                        <li><a href="results.html">Kết Quả</a></li>
+                        <li><a href="latex2doc.html">LaTeX to Doc</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Hỗ Trợ</h4>
+                    <ul>
+                        <li><a href="#" onclick="showHelp()">Hướng Dẫn</a></li>
+                        <li><a href="#" onclick="showSample()">Mẫu LaTeX</a></li>
+                        <li><a href="#" onclick="showContact()">Liên Hệ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 LaTeX Quiz Converter. Phát triển bởi AI Assistant.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content modal-large">
             <div class="modal-header">
-                <h3>Lưu Quiz</h3>
-                <button class="modal-close">&times;</button>
+                <h3><i class="fas fa-question-circle"></i> Hướng Dẫn Sử Dụng</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
             <div class="modal-body">
-                <form id="saveQuizForm">
-                    <div class="form-group">
-                        <label for="quizTitle">Tên Quiz:</label>
-                        <input type="text" id="quizTitle" required placeholder="Nhập tên quiz...">
-                    </div>
-                    <div class="form-group">
-                        <label for="quizDescription">Mô tả:</label>
-                        <textarea id="quizDescription" placeholder="Mô tả ngắn về quiz..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="quizDuration">Thời gian (phút):</label>
-                        <input type="number" id="quizDuration" min="1" max="180" value="30">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Hủy</button>
-                <button type="submit" form="saveQuizForm" class="btn btn-primary">Lưu</button>
+                <div class="help-content">
+                    <h4>1. Tạo Quiz từ LaTeX</h4>
+                    <p>• Truy cập <strong>Admin Dashboard</strong> (cần mật khẩu)</p>
+                    <p>• Dán LaTeX code vào khung bên trái</p>
+                    <p>• Nhấn <strong>Convert</strong> để chuyển đổi</p>
+                    <p>• Xem preview và nhấn <strong>Lưu Quiz</strong></p>
+
+                    <h4>2. Format LaTeX hỗ trợ</h4>
+                    <pre><code>\begin{ex}
+Câu hỏi của bạn với công thức $x^2 + 3x = 0$
+\choice
+    {Đáp án A}
+    {\True Đáp án B đúng}
+    {Đáp án C}
+\loigiai{Lời giải chi tiết...}
+\end{ex}</code></pre>
+
+                    <h4>3. Chia sẻ Quiz</h4>
+                    <p>• Click nút <strong>"Chia sẻ"</strong> trong danh sách quiz</p>
+                    <p>• Copy link hoặc quét QR code</p>
+                    <p>• Gửi cho học sinh qua WhatsApp, Facebook...</p>
+
+                    <h4>4. Xem Kết Quả</h4>
+                    <p>• Vào trang <strong>"Kết Quả"</strong></p>
+                    <p>• Xem thống kê tổng quan và chi tiết từng bài</p>
+                    <p>• Xuất dữ liệu ra JSON, CSV, TXT</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay">
-        <div class="loading-spinner">
-            <i class="fas fa-spinner fa-spin"></i>
-            <p>Đang xử lý...</p>
-        </div>
-    </div>
-
-    <!-- Toast Notifications -->
-    <div id="toastContainer" class="toast-container"></div>
-
-    <!-- Share Quiz Modal -->
-    <div id="shareQuizModal" class="modal">
-        <div class="modal-content">
+    <!-- Sample Modal -->
+    <div id="sampleModal" class="modal">
+        <div class="modal-content modal-large">
             <div class="modal-header">
-                <h3>Chia sẻ Quiz</h3>
-                <button class="modal-close">&times;</button>
+                <h3><i class="fas fa-file-code"></i> Mẫu LaTeX</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="share-info">
-                    <h4 id="shareQuizTitle">Tên Quiz</h4>
-                    <p id="shareQuizDescription">Mô tả quiz</p>
+                <div class="sample-content">
+                    <h4>Mẫu câu hỏi trắc nghiệm:</h4>
+                    <pre><code>\begin{ex}
+Cho hàm số $f(x) = x^2 + 2x - 3$. Tìm giá trị nhỏ nhất của hàm số.
+\choice
+    {$-4$}
+    {\True $-4$}
+    {$-3$}
+    {$0$}
+\loigiai{Ta có $f'(x) = 2x + 2 = 0 \Rightarrow x = -1$. Vậy $f_{min} = f(-1) = 1 - 2 - 3 = -4$.}
+\end{ex}</code></pre>
+
+                    <h4>Mẫu câu hỏi đúng-sai:</h4>
+                    <pre><code>\begin{ex}
+Xét tính đúng sai của các mệnh đề sau:
+\choiceTF
+    {\True Hàm số $y = x^2$ đồng biến trên $(0; +\infty)$}
+    {Hàm số $y = x^3$ nghịch biến trên $\mathbb{R}$}
+    {\True Đạo hàm của $y = \sin x$ là $y' = \cos x$}
+\loigiai{
+a) Đúng vì $y' = 2x > 0$ với $x > 0$
+b) Sai vì $y' = 3x^2 \geq 0$ với mọi $x$
+c) Đúng theo công thức đạo hàm cơ bản
+}
+\end{ex}</code></pre>
+
+                    <h4>Mẫu câu hỏi trả lời ngắn:</h4>
+                    <pre><code>\begin{ex}
+Tính tích phân $\int_0^1 x^2 dx$.
+\shortans{$\frac{1}{3}$}
+\loigiai{$\int_0^1 x^2 dx = \left[\frac{x^3}{3}\right]_0^1 = \frac{1}{3}$.}
+\end{ex}</code></pre>
                 </div>
-                
-                <div class="share-methods">
-                    <div class="share-method">
-                        <label>Link trực tiếp:</label>
-                        <div class="url-container">
-                            <input type="text" id="shareQuizUrl" readonly>
-                            <button class="btn btn-sm btn-secondary" onclick="dashboard.copyQuizUrl()">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="share-method">
-                        <label>QR Code:</label>
-                        <div id="qrCodeContainer" class="qr-container">
-                            <!-- QR code will be generated here -->
-                        </div>
-                    </div>
-                    
-                    <div class="share-method">
-                        <label>Chia sẻ qua:</label>
-                        <div class="social-share">
-                            <button class="btn btn-sm btn-success" onclick="dashboard.shareViaWhatsApp()">
-                                <i class="fab fa-whatsapp"></i> WhatsApp
-                            </button>
-                            <button class="btn btn-sm btn-primary" onclick="dashboard.shareViaFacebook()">
-                                <i class="fab fa-facebook"></i> Facebook
-                            </button>
-                            <button class="btn btn-sm btn-info" onclick="dashboard.shareViaTelegram()">
-                                <i class="fab fa-telegram"></i> Telegram
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="dashboard.closeModal()">Đóng</button>
             </div>
         </div>
     </div>
 
-    <!-- Thêm hướng dẫn chia sẻ vào dashboard -->
-    <div class="help-section">
-        <h3><i class="fas fa-question-circle"></i> Hướng dẫn chia sẻ Quiz</h3>
-        <div class="help-content">
-            <div class="help-item">
-                <h4>1. Tạo Quiz và lấy link:</h4>
-                <p>• Sau khi tạo quiz, click nút <strong>"Chia sẻ"</strong> trong danh sách quiz</p>
-                <p>• Copy link hoặc quét QR code để chia sẻ</p>
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-envelope"></i> Liên Hệ</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
-            <div class="help-item">
-                <h4>2. Gửi cho học sinh:</h4>
-                <p>• Gửi link qua WhatsApp, Facebook, Telegram</p>
-                <p>• Hoặc cho học sinh quét QR code</p>
-            </div>
-            <div class="help-item">
-                <h4>3. Xem kết quả:</h4>
-                <p>• Vào trang <strong>"Kết Quả"</strong> để xem thống kê</p>
-                <p>• Click vào từng kết quả để xem chi tiết bài làm</p>
+            <div class="modal-body">
+                <div class="contact-content">
+                    <p><strong>LaTeX Quiz Converter</strong></p>
+                    <p>Ứng dụng web chuyển đổi LaTeX thành Quiz Online</p>
+                    
+                    <div class="contact-info">
+                        <p><i class="fas fa-code"></i> <strong>Phát triển:</strong> AI Assistant</p>
+                        <p><i class="fas fa-calendar"></i> <strong>Phiên bản:</strong> 1.0.0</p>
+                        <p><i class="fas fa-globe"></i> <strong>Website:</strong> LaTeX Quiz Converter</p>
+                    </div>
+
+                    <div class="tech-stack">
+                        <h4>Công nghệ sử dụng:</h4>
+                        <ul>
+                            <li>HTML5, CSS3, JavaScript (Vanilla)</li>
+                            <li>MathJax cho render công thức toán</li>
+                            <li>Font Awesome cho icons</li>
+                            <li>Local Storage cho lưu trữ dữ liệu</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="js/latex-parser.js"></script>
-    <script src="js/quiz-manager.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/dashboard.js"></script>
+    <script>
+        // Modal functions
+        function showHelp() {
+            document.getElementById('helpModal').style.display = 'flex';
+        }
+
+        function showSample() {
+            document.getElementById('sampleModal').style.display = 'flex';
+        }
+
+        function showContact() {
+            document.getElementById('contactModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                closeModal();
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedElements = document.querySelectorAll('.feature-card, .type-card, .step-card, .action-card');
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
 </body>
 </html>
-
-
-
-
