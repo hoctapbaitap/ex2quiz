@@ -338,6 +338,17 @@ Tính đạo hàm của hàm số $f(x) = x^3 + 2x^2 - 5x + 1$.
     {$f'(x) = 3x^2 + 2x - 5$}
     {$f'(x) = x^2 + 4x - 5$}
 \\loigiai{Áp dụng quy tắc đạo hàm: $f'(x) = 3x^2 + 4x - 5$}
+\\end{ex}
+
+
+\\begin{ex} % Câu 3 TF
+Đuungs sai Tính đạo hàm của hàm số $f(x) = x^3 + 2x^2 - 5x + 1$.
+\\choiceTF
+    {\\True $f'(x) = 3x^2 + 4x - 5$}
+    {\\True $f'(x) = 3x^2 + 4x - 5$}
+    {$f'(x) = 3x^2 + 2x - 5$}
+    {$f'(x) = x^2 + 4x - 5$}
+\\loigiai{Áp dụng quy tắc đạo hàm: $f'(x) = 3x^2 + 4x - 5$}
 \\end{ex}`;
 
         this.elements.latexInput.value = sample;
@@ -392,10 +403,11 @@ Tính đạo hàm của hàm số $f(x) = x^3 + 2x^2 - 5x + 1$.
         };
 
         try {
-            const quizId = this.quizManager.saveQuiz(quizData);
+            this.showToast('Đang lưu quiz...', 'info');
+            const quizId = await this.quizManager.saveQuiz(quizData);
             this.showToast(`Đã lưu quiz "${quizData.title}" thành công`, 'success');
             this.closeModal();
-            this.loadQuizList();
+            await this.loadQuizList();
             
             // Reset form
             this.elements.saveQuizForm.reset();
@@ -407,46 +419,58 @@ Tính đạo hàm của hàm số $f(x) = x^3 + 2x^2 - 5x + 1$.
     }
 
     /**
-     * Load and display quiz list
+     * Load and display quiz list with async
      */
-    loadQuizList() {
-        const quizzes = this.quizManager.getAllQuizzes();
-        const container = this.elements.quizList;
+    async loadQuizList() {
+        console.log('Dashboard: Loading quiz list...');
         
-        if (quizzes.length === 0) {
-            container.innerHTML = `
-                <div class="empty-quiz-list">
-                    <i class="fas fa-folder-open"></i>
-                    <p>Chưa có quiz nào được lưu</p>
-                </div>
-            `;
-            return;
-        }
+        try {
+            const quizzes = await this.quizManager.getAllQuizzes();
+            console.log('Dashboard: Found quizzes:', quizzes.length);
+            
+            const container = this.elements.quizList;
+            
+            if (quizzes.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-quiz-list">
+                        <i class="fas fa-folder-open"></i>
+                        <p>Chưa có quiz nào được lưu</p>
+                    </div>
+                `;
+                return;
+            }
 
-        container.innerHTML = quizzes.map(quiz => `
-            <div class="quiz-item" data-quiz-id="${quiz.id}">
-                <div class="quiz-info">
-                    <h4>${quiz.title}</h4>
-                    <p>${quiz.description || 'Không có mô tả'}</p>
-                    <div class="quiz-meta">
-                        <span><i class="fas fa-question-circle"></i> ${quiz.totalQuestions} câu</span>
-                        <span><i class="fas fa-clock"></i> ${quiz.duration} phút</span>
-                        <span><i class="fas fa-calendar"></i> ${new Date(quiz.createdAt).toLocaleDateString('vi-VN')}</span>
+            container.innerHTML = quizzes.map(quiz => `
+                <div class="quiz-item" data-quiz-id="${quiz.id}">
+                    <div class="quiz-info">
+                        <h4>${quiz.title}</h4>
+                        <p>${quiz.description || 'Không có mô tả'}</p>
+                        <div class="quiz-meta">
+                            <span><i class="fas fa-question-circle"></i> ${quiz.totalQuestions} câu</span>
+                            <span><i class="fas fa-clock"></i> ${quiz.duration} phút</span>
+                            <span><i class="fas fa-calendar"></i> ${new Date(quiz.createdAt).toLocaleDateString('vi-VN')}</span>
+                        </div>
+                    </div>
+                    <div class="quiz-actions">
+                        <button class="btn btn-sm btn-primary" onclick="window.open('quiz.html?id=${quiz.id}', '_blank')">
+                            <i class="fas fa-play"></i> Thi
+                        </button>
+                        <button class="btn btn-sm btn-success" onclick="dashboard.shareQuiz('${quiz.id}')">
+                            <i class="fas fa-share-alt"></i> Chia sẻ
+                        </button>
+                        <button class="btn btn-sm btn-secondary" onclick="dashboard.editQuiz('${quiz.id}')">
+                            <i class="fas fa-edit"></i> Sửa
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="dashboard.deleteQuiz('${quiz.id}')">
+                            <i class="fas fa-trash"></i> Xóa
+                        </button>
                     </div>
                 </div>
-                <div class="quiz-actions">
-                    <button class="btn btn-sm btn-primary" onclick="dashboard.startQuiz('${quiz.id}')">
-                        <i class="fas fa-play"></i> Thi
-                    </button>
-                    <button class="btn btn-sm btn-secondary" onclick="dashboard.editQuiz('${quiz.id}')">
-                        <i class="fas fa-edit"></i> Sửa
-                    </button>
-                    <button class="btn btn-sm btn-danger" onclick="dashboard.deleteQuiz('${quiz.id}')">
-                        <i class="fas fa-trash"></i> Xóa
-                    </button>
-                </div>
-            </div>
-        `).join('');
+            `).join('');
+        } catch (error) {
+            console.error('Error loading quiz list:', error);
+            this.showToast('Lỗi tải danh sách quiz', 'error');
+        }
     }
 
     /**
@@ -594,9 +618,176 @@ ${choices}
         // Reset file input
         event.target.value = '';
     }
+
+    /**
+     * Share quiz with server URL
+     */
+    shareQuiz(quizId) {
+        const shareUrl = `https://quiz.lop12.com/quiz.html?id=${quizId}`;
+        
+        // Show share modal
+        this.showShareModal({ id: quizId, title: 'Quiz' }, shareUrl);
+    }
+
+    /**
+     * Show share modal
+     */
+    showShareModal(quiz, shareUrl) {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.style.display = 'flex';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-share-alt"></i> Chia sẻ Quiz: ${quiz.title}</h3>
+                    <button class="modal-close" onclick="this.closest('.modal').remove()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="share-section">
+                        <label>Link chia sẻ:</label>
+                        <div class="share-url-container">
+                            <input type="text" id="shareUrl" value="${shareUrl}" readonly>
+                            <button class="btn btn-primary" onclick="dashboard.copyShareUrl()">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                    <div class="share-section">
+                        <label>QR Code:</label>
+                        <div id="qrcode" class="qr-container"></div>
+                    </div>
+                    <div class="share-section">
+                        <label>Thông tin Quiz:</label>
+                        <div class="quiz-share-info">
+                            <p><strong>Tên:</strong> ${quiz.title}</p>
+                            <p><strong>Số câu:</strong> ${quiz.totalQuestions}</p>
+                            <p><strong>Thời gian:</strong> ${quiz.duration} phút</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="this.closest('.modal').remove()">
+                        <i class="fas fa-times"></i> Đóng
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Generate QR code
+        this.generateQRCode(shareUrl);
+        
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    }
+
+    /**
+     * Copy share URL
+     */
+    async copyShareUrl() {
+        const urlInput = document.getElementById('shareUrl');
+        try {
+            await navigator.clipboard.writeText(urlInput.value);
+            this.showToast('Đã copy link chia sẻ', 'success');
+        } catch (error) {
+            // Fallback for older browsers
+            urlInput.select();
+            document.execCommand('copy');
+            this.showToast('Đã copy link chia sẻ', 'success');
+        }
+    }
+
+    /**
+     * Generate QR Code
+     */
+    generateQRCode(url) {
+        const qrContainer = document.getElementById('qrcode');
+        if (!qrContainer) return;
+        
+        // Simple QR code using Google Charts API
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}`;
+        qrContainer.innerHTML = `<img src="${qrUrl}" alt="QR Code" style="max-width: 150px;">`;
+    }
+
+    /**
+     * Export quiz to JSON file
+     */
+    exportQuiz(quizId) {
+        const quiz = this.quizManager.getQuiz(quizId);
+        if (!quiz) {
+            this.showToast('Không tìm thấy quiz', 'error');
+            return;
+        }
+        
+        const exportData = {
+            quiz: quiz,
+            exportedAt: new Date().toISOString(),
+            version: '1.0'
+        };
+        
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], 
+            { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `quiz-${quiz.slug || quiz.id}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        this.showToast('Đã xuất quiz thành công', 'success');
+    }
+
+    /**
+     * Import quiz from JSON file
+     */
+    importQuiz() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.quiz) {
+                        // Generate new ID to avoid conflicts
+                        data.quiz.id = 'quiz_' + Date.now();
+                        data.quiz.title = data.quiz.title + ' (Imported)';
+                        
+                        this.quizManager.saveQuiz(data.quiz);
+                        this.loadQuizList();
+                        this.showToast('Import quiz thành công', 'success');
+                    } else {
+                        throw new Error('Invalid quiz file format');
+                    }
+                } catch (error) {
+                    this.showToast('Lỗi import quiz: ' + error.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    }
 }
 
 // Initialize dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.dashboard = new Dashboard();
 });
+
+
+
+
+
+

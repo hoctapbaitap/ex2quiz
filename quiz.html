@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -58,16 +59,26 @@
                     <span id="questionProgress">Câu 1/10</span>
                     <span id="timeRemaining">30:00</span>
                 </div>
+                <!-- Thêm form thông tin thí sinh -->
+                <div class="student-info-form">
+                    <div class="info-row">
+                        <div class="info-field">
+                            <label for="studentNameInput">Tên:</label>
+                            <input type="text" id="studentNameInput" placeholder="Nhập họ tên" class="student-input">
+                        </div>
+                        <div class="info-field">
+                            <label for="studentClassInput">Lớp:</label>
+                            <input type="text" id="studentClassInput" placeholder="Nhập lớp" class="student-input">
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="quiz-controls">
                 <button id="viewModeBtn" class="btn btn-secondary">
                     <i class="fas fa-list"></i>
                     Xem tất cả
                 </button>
-                <button id="pauseBtn" class="btn btn-secondary">
-                    <i class="fas fa-pause"></i>
-                    Tạm dừng
-                </button>
+
                 <button id="submitQuizBtn" class="btn btn-danger">
                     <i class="fas fa-flag-checkered"></i>
                     Nộp bài
@@ -118,18 +129,10 @@
             </div>
 
             <div class="quiz-sidebar">
-                <div class="question-grid" id="questionGrid">
-                    <!-- Question grid will be loaded here -->
-                </div>
-
-                <div class="quiz-stats">
-                    <div class="stat-item">
-                        <span class="stat-label">Đã làm:</span>
-                        <span class="stat-value" id="answeredCount">0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Còn lại:</span>
-                        <span class="stat-value" id="remainingCount">0</span>
+                <div class="question-grid-container">
+                    <h4>Danh sách câu hỏi</h4>
+                    <div id="questionGrid" class="question-grid">
+                        <!-- Question grid items will be generated here -->
                     </div>
                 </div>
             </div>
@@ -172,16 +175,16 @@
                 </div>
 
                 <div class="result-actions">
-                    <button id="reviewAnswersBtn" class="btn btn-primary">
+                    <button id="reviewAnswersBtn" class="btn btn-secondary">
                         <i class="fas fa-eye"></i>
-                        Xem đáp án
+                        Xem lại đáp án
                     </button>
-                    <button id="retakeQuizBtn" class="btn btn-secondary">
+                    <button id="retakeQuizBtn" class="btn btn-primary">
                         <i class="fas fa-redo"></i>
                         Làm lại
                     </button>
-                    <button id="backToSelectionBtn" class="btn btn-secondary">
-                        <i class="fas fa-list"></i>
+                    <button id="backToSelectionBtn" class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i>
                         Chọn quiz khác
                     </button>
                 </div>
@@ -190,72 +193,33 @@
     </div>
 
     <!-- Pause Modal -->
-    <div id="pauseModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>
-                    <i class="fas fa-pause-circle"></i>
-                    Quiz đã tạm dừng
-                </h3>
-            </div>
-            <div class="modal-body">
-                <p>Bài thi đã được tạm dừng. Thời gian sẽ không chạy khi bạn tạm dừng.</p>
-                <div class="pause-stats">
-                    <div class="pause-stat">
-                        <span>Câu đã làm:</span>
-                        <span id="pauseAnsweredCount">0</span>
-                    </div>
-                    <div class="pause-stat">
-                        <span>Thời gian còn lại:</span>
-                        <span id="pauseTimeRemaining">00:00</span>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="resumeQuizBtn" class="btn btn-primary">
-                    <i class="fas fa-play"></i>
-                    Tiếp tục
-                </button>
-                <button id="quitQuizBtn" class="btn btn-danger">
-                    <i class="fas fa-times"></i>
-                    Thoát quiz
-                </button>
-            </div>
-        </div>
-    </div>
+
 
     <!-- Submit Confirmation Modal -->
-    <div id="submitModal" class="modal">
+    <div id="submitModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>
-                    <i class="fas fa-flag-checkered"></i>
-                    Xác nhận nộp bài
-                </h3>
+                <h3>Xác nhận nộp bài</h3>
             </div>
             <div class="modal-body">
-                <p>Bạn có chắc chắn muốn nộp bài không?</p>
-                <div class="submit-warning">
-                    <div class="warning-item">
-                        <span>Câu đã làm:</span>
-                        <span id="submitAnsweredCount">0</span>
+                <p>Bạn có chắc muốn nộp bài?</p>
+                <div class="submit-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Đã trả lời:</span>
+                        <span id="submitAnsweredCount">0</span> câu
                     </div>
-                    <div class="warning-item">
-                        <span>Câu chưa làm:</span>
-                        <span id="submitRemainingCount">0</span>
+                    <div class="stat-item">
+                        <span class="stat-label">Chưa trả lời:</span>
+                        <span id="submitRemainingCount">0</span> câu
                     </div>
                 </div>
-                <p class="warning-text">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    Sau khi nộp bài, bạn không thể thay đổi đáp án!
-                </p>
             </div>
             <div class="modal-footer">
                 <button id="cancelSubmitBtn" class="btn btn-secondary">
-                    <i class="fas fa-times"></i>
-                    Hủy
+                    <i class="fas fa-arrow-left"></i>
+                    Quay lại
                 </button>
-                <button id="confirmSubmitBtn" class="btn btn-danger">
+                <button id="confirmSubmitBtn" class="btn btn-primary">
                     <i class="fas fa-check"></i>
                     Nộp bài
                 </button>
@@ -307,5 +271,46 @@
     <script src="js/utils.js"></script>
     <script src="js/quiz.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- User Info Modal - XÓA TOÀN BỘ PHẦN NÀY -->
+    <div id="debug-panel" style="position: fixed; top: 10px; right: 10px; background: #f0f0f0; padding: 10px; border-radius: 5px; z-index: 10000; font-size: 12px;">
+        <button onclick="debugQuiz()" style="background: #007bff; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">
+            Debug
+        </button>
+    </div>
+
+    <script>
+    function debugQuiz() {
+        console.log('=== QUIZ DEBUG ===');
+        
+        // Check URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        console.log('URL Params:', {
+            id: urlParams.get('id'),
+            slug: urlParams.get('slug')
+        });
+        
+        // Check QuizApp
+        if (window.quizApp) {
+            console.log('QuizApp exists:', window.quizApp);
+            console.log('Current Quiz:', window.quizApp.currentQuiz);
+            
+            // Test quiz manager
+            if (window.quizApp.quizManager) {
+                window.quizApp.quizManager.debugStorage();
+            }
+        } else {
+            console.error('QuizApp not found');
+        }
+        
+        // Check elements
+        console.log('Quiz elements:', {
+            selectionScreen: document.getElementById('quiz-selection-screen'),
+            takingScreen: document.getElementById('quiz-taking-screen'),
+            resultScreen: document.getElementById('quiz-result-screen')
+        });
+    }
+    </script>
 </body>
 </html>
+

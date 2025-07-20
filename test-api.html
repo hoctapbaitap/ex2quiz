@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test API</title>
+</head>
+<body>
+    <h1>Test API Quiz</h1>
+    <div id="results"></div>
+    
+    <script>
+    async function testAPI() {
+        const results = document.getElementById('results');
+        
+        try {
+            // Test 1: List quizzes
+            console.log('Testing list quizzes...');
+            const listResponse = await fetch('/api/quiz.php?action=list');
+            const listData = await listResponse.json();
+            results.innerHTML += `<p><strong>List API:</strong> ${JSON.stringify(listData)}</p>`;
+            
+            // Test 2: Save quiz
+            console.log('Testing save quiz...');
+            const testQuiz = {
+                quiz: {
+                    title: 'Test Quiz',
+                    description: 'Test Description',
+                    duration: 30,
+                    questions: [],
+                    totalQuestions: 0
+                }
+            };
+            
+            const saveResponse = await fetch('/api/quiz.php?action=save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(testQuiz)
+            });
+            const saveData = await saveResponse.json();
+            results.innerHTML += `<p><strong>Save API:</strong> ${JSON.stringify(saveData)}</p>`;
+            
+        } catch (error) {
+            results.innerHTML += `<p><strong>Error:</strong> ${error.message}</p>`;
+            console.error('API Test Error:', error);
+        }
+    }
+    
+    testAPI();
+    </script>
+</body>
+</html>

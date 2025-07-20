@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaTeX to Document Converter</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-file-alt"></i>
+                <span>LaTeX to Document</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="quiz.html" class="nav-link">
+                    <i class="fas fa-play"></i>
+                    Thi Online
+                </a>
+                <a href="results.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    Kết Quả
+                </a>
+                <a href="latex2doc.html" class="nav-link active">
+                    <i class="fas fa-file-alt"></i>
+                    LaTeX to Doc
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="page-header">
+            <h1>
+                <i class="fas fa-file-alt"></i>
+                LaTeX to Document Converter
+            </h1>
+            <p>Chuyển đổi LaTeX thành định dạng văn bản</p>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- LaTeX Input Panel -->
+            <div class="panel latex-panel">
+                <div class="panel-header">
+                    <h2>
+                        <i class="fas fa-code"></i>
+                        LaTeX Input
+                    </h2>
+                    <div class="panel-actions">
+                        <button id="clearDocBtn" class="btn btn-secondary">
+                            <i class="fas fa-trash"></i>
+                            Xóa
+                        </button>
+                        <button id="loadDocSampleBtn" class="btn btn-primary">
+                            <i class="fas fa-file-import"></i>
+                            Mẫu
+                        </button>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <textarea 
+                        id="latexDocInput" 
+                        placeholder="Dán LaTeX code vào đây để chuyển đổi thành văn bản...&#10;&#10;Ví dụ:&#10;\begin{ex}&#10;Câu hỏi của bạn...&#10;\choice&#10;    {Đáp án A}&#10;    {\True Đáp án B đúng}&#10;    {Đáp án C}&#10;    {Đáp án D}&#10;\loigiai{Lời giải...}&#10;\end{ex}"
+                    ></textarea>
+                    <div class="input-stats">
+                        <span id="docCharCount">0 ký tự</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Document Preview Panel -->
+            <div class="panel preview-panel">
+                <div class="panel-header">
+                    <h2>
+                        <i class="fas fa-file-text"></i>
+                        Document Preview
+                    </h2>
+                    <div class="panel-actions">
+                        <button id="convertDocBtn" class="btn btn-success">
+                            <i class="fas fa-sync-alt"></i>
+                            Convert
+                        </button>
+                        <button id="copyDocBtn" class="btn btn-primary">
+                            <i class="fas fa-copy"></i>
+                            Copy Text
+                        </button>
+                        <button id="downloadDocBtn" class="btn btn-secondary">
+                            <i class="fas fa-download"></i>
+                            Download
+                        </button>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div id="docPreviewContent" class="doc-preview-content">
+                        <div class="empty-state">
+                            <i class="fas fa-file-text"></i>
+                            <h3>Chưa có nội dung</h3>
+                            <p>Nhập LaTeX code và nhấn Convert để xem văn bản</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/latex-parser.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/latex2doc.js"></script>
+</body>
+</html>

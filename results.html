@@ -145,6 +145,29 @@
                 </div>
             </div>
         </div>
+
+        <!-- Thêm tab thống kê -->
+        <div class="results-tabs">
+            <button class="tab-btn active" onclick="resultsApp.showTab('results')">
+                <i class="fas fa-list"></i> Kết quả
+            </button>
+            <button class="tab-btn" onclick="resultsApp.showTab('statistics')">
+                <i class="fas fa-chart-pie"></i> Thống kê
+            </button>
+        </div>
+
+        <!-- Thêm phần thống kê -->
+        <div id="statisticsTab" class="tab-content" style="display: none;">
+            <div class="statistics-header">
+                <h2><i class="fas fa-chart-pie"></i> Thống kê Quiz</h2>
+                <button class="btn btn-primary" onclick="resultsApp.exportStatistics()">
+                    <i class="fas fa-download"></i> Xuất thống kê
+                </button>
+            </div>
+            <div id="quizStatistics" class="quiz-statistics">
+                <!-- Statistics will be rendered here -->
+            </div>
+        </div>
     </div>
 
     <!-- Result Detail Modal -->
@@ -241,3 +264,5 @@
     <script src="js/results.js"></script>
 </body>
 </html>
+
+

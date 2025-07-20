@@ -81,18 +81,37 @@ class ResultsApp {
      */
     loadResults() {
         this.showLoading(true);
-        
-        try {
-            this.allResults = this.quizManager.getAllResults();
-            this.updateStatistics();
-            this.updateQuizFilter();
-            this.applyFilters();
-            this.renderChart();
-        } catch (error) {
-            console.error('Error loading results:', error);
-            this.showToast('Lỗi tải dữ liệu kết quả', 'error');
-        } finally {
-            this.showLoading(false);
+        const resultPromise = this.quizManager.getAllResults();
+        if (resultPromise && typeof resultPromise.then === 'function') {
+            // Trường hợp dùng server, trả về Promise
+            resultPromise.then(results => {
+                this.allResults = results;
+                console.log('Loaded results:', this.allResults);
+                this.updateStatistics();
+                this.updateQuizFilter();
+                this.applyFilters();
+                this.renderChart();
+                this.showLoading(false);
+            }).catch(error => {
+                console.error('Error loading results:', error);
+                this.showToast('Lỗi tải dữ liệu kết quả', 'error');
+                this.showLoading(false);
+            });
+        } else {
+            // Trường hợp local
+            try {
+                this.allResults = resultPromise;
+                console.log('Loaded results:', this.allResults);
+                this.updateStatistics();
+                this.updateQuizFilter();
+                this.applyFilters();
+                this.renderChart();
+            } catch (error) {
+                console.error('Error loading results:', error);
+                this.showToast('Lỗi tải dữ liệu kết quả', 'error');
+            } finally {
+                this.showLoading(false);
+            }
         }
     }
 
@@ -121,20 +140,35 @@ class ResultsApp {
      * Update quiz filter dropdown
      */
     updateQuizFilter() {
-        const quizzes = this.quizManager.getAllQuizzes();
-        const currentValue = this.elements.quizFilter.value;
+        if (!this.elements.quizFilter) return;
         
-        this.elements.quizFilter.innerHTML = '<option value="">Tất cả quiz</option>';
-        
-        quizzes.forEach(quiz => {
-            const option = document.createElement('option');
-            option.value = quiz.id;
-            option.textContent = quiz.title;
-            this.elements.quizFilter.appendChild(option);
-        });
-        
-        // Restore previous selection
-        this.elements.quizFilter.value = currentValue;
+        try {
+            // Get unique quiz IDs from results
+            const quizIds = [...new Set(this.allResults.map(result => result.quizId))];
+            console.log('Quiz IDs from results:', quizIds);
+            
+            // Get quiz titles
+            const quizOptions = quizIds.map(quizId => {
+                const quiz = this.quizManager.getQuiz(quizId);
+                return {
+                    id: quizId,
+                    title: quiz ? quiz.title : 'Quiz đã xóa'
+                };
+            }).filter(quiz => quiz.title !== 'Quiz đã xóa');
+            
+            console.log('Quiz options:', quizOptions);
+            
+            // Update dropdown
+            this.elements.quizFilter.innerHTML = `
+                <option value="">Tất cả quiz</option>
+                ${quizOptions.map(quiz => 
+                    `<option value="${quiz.id}">${quiz.title}</option>`
+                ).join('')}
+            `;
+        } catch (error) {
+            console.error('Error updating quiz filter:', error);
+            this.elements.quizFilter.innerHTML = '<option value="">Tất cả quiz</option>';
+        }
     }
 
     /**
@@ -199,12 +233,15 @@ class ResultsApp {
 
         container.innerHTML = this.filteredResults.map(result => {
             const grade = Utils.getGrade(result.percentage);
+            const studentInfo = result.userInfo && result.userInfo.name !== 'Ẩn danh' ? 
+                `${result.userInfo.name} - ${result.userInfo.class}` : 'Ẩn danh';
             
             return `
                 <div class="result-item" onclick="resultsApp.showResultDetail('${result.id}')">
                     <div class="result-item-header">
                         <div>
                             <div class="result-item-title">${result.quizTitle}</div>
+                            <div class="result-item-student">${studentInfo}</div>
                             <div class="result-item-date">${Utils.formatRelativeTime(result.completedAt)}</div>
                         </div>
                         <div class="result-score">
@@ -267,75 +304,113 @@ class ResultsApp {
      */
     renderDetailedResult(result, quiz) {
         const grade = Utils.getGrade(result.percentage);
-        
+        const studentInfo = result.userInfo && result.userInfo.name !== 'Ẩn danh' ? 
+            `${result.userInfo.name} - ${result.userInfo.class}` : 'Ẩn danh';
+
         const headerHtml = `
             <div class="result-detail-header">
                 <div class="result-summary">
                     <div class="summary-item">
+                        <span class="summary-label">Thí sinh:</span>
+                        <span class="summary-value">${studentInfo}</span>
+                    </div>
+                    <div class="summary-item">
                         <span class="summary-label">Điểm số:</span>
+                        <span class="summary-value" style="color: ${grade.color}">
+                            ${result.score ? result.score.toFixed(2) : (result.correctAnswers * 10 / result.totalQuestions).toFixed(2)}/10
+                        </span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Phần trăm:</span>
                         <span class="summary-value" style="color: ${grade.color}">${result.percentage}%</span>
                     </div>
                     <div class="summary-item">
-                        <span class="summary-label">Câu đúng:</span>
+                        <span class="summary-label">Số câu đúng:</span>
                         <span class="summary-value">${result.correctAnswers}/${result.totalQuestions}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Thời gian:</span>
-                        <span class="summary-value">${Utils.formatTimeDisplay(result.timeSpent)}</span>
                     </div>
                     <div class="summary-item">
                         <span class="summary-label">Xếp loại:</span>
                         <span class="summary-value" style="color: ${grade.color}">${grade.letter} - ${grade.description}</span>
                     </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Thời gian:</span>
+                        <span class="summary-value">${Utils.formatTimeDisplay(result.timeSpent)}</span>
+                    </div>
                 </div>
             </div>
         `;
 
-        const questionsHtml = result.answers.map(answer => {
-            const question = quiz.questions.find(q => q.id === answer.questionId);
-            if (!question) return '';
-
-            const userChoice = answer.userAnswer !== undefined ? 
-                question.choices[answer.userAnswer] : null;
-            const correctChoice = question.choices[answer.correctAnswer];
-
-            return `
-                <div class="result-question ${answer.isCorrect ? 'correct' : 'incorrect'}">
-                    <div class="result-question-header">
-                        <span class="question-number">Câu ${answer.questionNumber}</span>
-                        <span class="result-status ${answer.isCorrect ? 'correct' : 'incorrect'}">
-                            <i class="fas fa-${answer.isCorrect ? 'check' : 'times'}"></i>
-                            ${answer.isCorrect ? 'Đúng' : 'Sai'}
-                        </span>
-                    </div>
-                    <div class="result-question-content">
-                        <div class="question-text">${question.question}</div>
-                        ${userChoice ? `
-                            <div class="user-answer">
-                                <strong>Bạn chọn:</strong> ${userChoice.text}
-                            </div>
-                        ` : `
-                            <div class="user-answer no-answer">
-                                <strong>Bạn chưa chọn đáp án</strong>
-                            </div>
-                        `}
-                        <div class="correct-answer">
-                            <strong>Đáp án đúng:</strong> ${correctChoice.text}
-                        </div>
-                        ${question.explanation ? `
-                            <div class="explanation">
-                                <strong>Lời giải:</strong> ${question.explanation}
-                            </div>
-                        ` : ''}
-                    </div>
-                </div>
-            `;
+        // Render chi tiết từng câu hỏi như trong review
+        const questionsHtml = quiz.questions.map((question, index) => {
+            const userAnswer = result.answers[index];
+            return this.renderQuestionDetail(question, userAnswer, index + 1);
         }).join('');
 
         this.elements.resultDetailContent.innerHTML = headerHtml + questionsHtml;
         
         // Render math if available
         this.renderMath();
+    }
+
+    /**
+     * Render chi tiết từng câu hỏi
+     */
+    renderQuestionDetail(question, userAnswer, questionNumber) {
+        let answerDisplay = '';
+        let resultClass = userAnswer && userAnswer.isCorrect ? 'correct' : 'incorrect';
+
+        if (question.type === 'multiple-choice') {
+            const choicesHtml = question.choices.map((choice, index) => {
+                let choiceClass = '';
+                let icon = '';
+                
+                if (index === question.correctAnswers) {
+                    choiceClass = 'result-choice-correct';
+                    icon = '<i class="fas fa-check result-choice-icon"></i>';
+                }
+                
+                if (userAnswer && userAnswer.userAnswer === index) {
+                    if (index === question.correctAnswers) {
+                        choiceClass = 'result-choice-correct';
+                    } else {
+                        choiceClass = 'result-choice-incorrect';
+                        icon = '<i class="fas fa-times result-choice-icon"></i>';
+                    }
+                }
+
+                return `
+                    <div class="result-choice ${choiceClass}">
+                        <span class="result-choice-label">${String.fromCharCode(65 + index)}.</span>
+                        <span class="result-choice-text">${choice.text}</span>
+                        ${icon}
+                    </div>
+                `;
+            }).join('');
+            answerDisplay = choicesHtml;
+        }
+
+        return `
+            <div class="question-detail ${resultClass}">
+                <div class="question-header">
+                    <h4>
+                        <span class="question-number">Câu ${questionNumber}</span>
+                        <span class="question-score">
+                            ${userAnswer ? userAnswer.score.toFixed(2) : 0}/${userAnswer ? userAnswer.maxScore.toFixed(2) : 0} điểm
+                        </span>
+                    </h4>
+                </div>
+                <div class="question-content">
+                    <div class="question-text">${question.question}</div>
+                    <div class="question-answers">${answerDisplay}</div>
+                    ${question.explanation ? `
+                        <div class="explanation">
+                            <strong><i class="fas fa-lightbulb"></i> Lời giải:</strong> 
+                            ${question.explanation}
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `;
     }
 
     /**
@@ -705,37 +780,77 @@ class ResultsApp {
     }
 
     /**
-     * Show loading overlay
+     * Show loading state
      */
     showLoading(show) {
-        const overlay = document.getElementById('loadingOverlay');
-        overlay.style.display = show ? 'flex' : 'none';
+        let loader = document.getElementById('results-loading');
+        
+        if (!loader && show) {
+            loader = document.createElement('div');
+            loader.id = 'results-loading';
+            loader.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+            `;
+            loader.innerHTML = `
+                <div style="background: white; padding: 20px; border-radius: 8px; text-align: center;">
+                    <div style="border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 2s linear infinite; margin: 0 auto 10px;"></div>
+                    <p>Đang tải kết quả...</p>
+                </div>
+            `;
+            document.body.appendChild(loader);
+        }
+        
+        if (loader) {
+            loader.style.display = show ? 'flex' : 'none';
+        }
     }
 
     /**
      * Show toast notification
      */
     showToast(message, type = 'info') {
+        console.log(`Toast (${type}):`, message);
+        
+        let toastContainer = document.getElementById('toastContainer');
+        if (!toastContainer) {
+            toastContainer = document.createElement('div');
+            toastContainer.id = 'toastContainer';
+            toastContainer.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 10000;
+            `;
+            document.body.appendChild(toastContainer);
+        }
+        
         const toast = document.createElement('div');
-        toast.className = `toast toast-${type}`;
-        toast.innerHTML = `
-            <i class="fas fa-${this.getToastIcon(type)}"></i>
-            <span>${message}</span>
-            <button class="toast-close">&times;</button>
+        toast.style.cssText = `
+            background: ${type === 'error' ? '#f56565' : type === 'success' ? '#48bb78' : '#4299e1'};
+            color: white;
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         `;
-
-        const container = document.getElementById('toastContainer');
-        container.appendChild(toast);
-
+        toast.textContent = message;
+        
+        toastContainer.appendChild(toast);
+        
         setTimeout(() => {
             if (toast.parentNode) {
                 toast.remove();
             }
-        }, 5000);
-
-        toast.querySelector('.toast-close').addEventListener('click', () => {
-            toast.remove();
-        });
+        }, 3000);
     }
 
     /**
@@ -750,9 +865,140 @@ class ResultsApp {
         };
         return icons[type] || 'info-circle';
     }
+
+    /**
+     * Review result - show detailed answers like in quiz review
+     */
+    reviewResult(resultId) {
+        const result = this.findResultById(resultId);
+        if (!result) {
+            this.showToast('Không tìm thấy kết quả', 'error');
+            return;
+        }
+        
+        const quiz = this.quizManager.getQuiz(result.quizId);
+        if (!quiz) {
+            this.showToast('Không tìm thấy quiz', 'error');
+            return;
+        }
+        
+        // Create review page URL with result data
+        const reviewData = {
+            quiz: quiz,
+            result: result,
+            userInfo: result.userInfo || { name: 'Ẩn danh', class: 'Không xác định' }
+        };
+        
+        // Store in sessionStorage for review page
+        sessionStorage.setItem('reviewData', JSON.stringify(reviewData));
+        
+        // Open review page
+        window.open('review.html', '_blank');
+    }
+
+    /**
+     * Find result by ID across all quizzes
+     */
+    findResultById(resultId) {
+        const allResults = this.quizManager.getAllResults();
+        for (const quizId in allResults) {
+            const quizResults = allResults[quizId];
+            const result = quizResults.find(r => r.id === resultId);
+            if (result) {
+                return result;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Load and display quiz statistics
+     */
+    loadQuizStatistics() {
+        const allResults = this.quizManager.getAllResults();
+        const quizStats = {};
+        
+        // Tính thống kê cho từng quiz
+        for (const quizId in allResults) {
+            const quiz = this.quizManager.getQuiz(quizId);
+            if (!quiz) continue;
+            
+            const results = allResults[quizId];
+            const scores = results.map(r => r.percentage);
+            
+            quizStats[quizId] = {
+                title: quiz.title,
+                totalAttempts: results.length,
+                averageScore: scores.length > 0 ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1) : 0,
+                highestScore: scores.length > 0 ? Math.max(...scores) : 0,
+                lowestScore: scores.length > 0 ? Math.min(...scores) : 0,
+                passRate: scores.filter(s => s >= 50).length,
+                students: results.map(r => ({
+                    name: r.userInfo?.name || 'Ẩn danh',
+                    class: r.userInfo?.class || 'Không xác định',
+                    score: r.percentage,
+                    completedAt: r.completedAt
+                }))
+            };
+        }
+        
+        this.renderQuizStatistics(quizStats);
+    }
+
+    /**
+     * Render quiz statistics
+     */
+    renderQuizStatistics(quizStats) {
+        const container = document.getElementById('quizStatistics');
+        if (!container) return;
+        
+        const statsHtml = Object.entries(quizStats).map(([quizId, stats]) => `
+            <div class="quiz-stat-card">
+                <div class="quiz-stat-header">
+                    <h3>${stats.title}</h3>
+                    <div class="quiz-stat-summary">
+                        <span class="stat-badge">${stats.totalAttempts} lượt thi</span>
+                        <span class="stat-badge">TB: ${stats.averageScore}%</span>
+                        <span class="stat-badge">Đậu: ${stats.passRate}/${stats.totalAttempts}</span>
+                    </div>
+                </div>
+                <div class="quiz-stat-details">
+                    <div class="stat-row">
+                        <span>Điểm cao nhất:</span>
+                        <span class="stat-value high">${stats.highestScore}%</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Điểm thấp nhất:</span>
+                        <span class="stat-value low">${stats.lowestScore}%</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Tỷ lệ đậu:</span>
+                        <span class="stat-value">${((stats.passRate/stats.totalAttempts)*100).toFixed(1)}%</span>
+                    </div>
+                </div>
+                <div class="student-list">
+                    <h4>Danh sách học sinh:</h4>
+                    ${stats.students.map(student => `
+                        <div class="student-item">
+                            <span class="student-name">${student.name} (${student.class})</span>
+                            <span class="student-score ${student.score >= 50 ? 'pass' : 'fail'}">${student.score}%</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
+        
+        container.innerHTML = statsHtml || '<p>Chưa có dữ liệu thống kê</p>';
+    }
 }
 
 // Initialize results app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.resultsApp = new ResultsApp();
 });
+
+
+
+
+
+

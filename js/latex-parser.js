@@ -252,7 +252,15 @@ class LaTeXParser {
             throw new Error('Không thể phân tích shortans');
         }
 
-        return shortansMatch[1].trim();
+        let answer = shortansMatch[1].trim();
+        
+        // Extract content between $ signs if present
+        const mathMatch = answer.match(/\$([^$]+)\$/);
+        if (mathMatch) {
+            answer = mathMatch[1].trim();
+        }
+
+        return answer;
     }
 
     /**
@@ -297,18 +305,18 @@ class LaTeXParser {
      * Find the correct answer(s) based on question type
      * @param {Array} choices - Array of choice objects
      * @param {string} questionType - Type of question ('multiple-choice' or 'true-false')
-     * @returns {Array|number} Array of correct indices for true-false, single index for multiple-choice
+     * @returns {Array|number} Array of boolean values for true-false, single index for multiple-choice
      */
     findCorrectAnswers(choices, questionType) {
         if (questionType === 'true-false') {
-            // For true-false questions, return array of all correct indices
-            const correctIndices = [];
+            // For true-false questions, return array of boolean values for each choice
+            // \True means the statement is TRUE, no \True means the statement is FALSE
+            const correctAnswers = [];
             for (let i = 0; i < choices.length; i++) {
-                if (choices[i].isCorrect) {
-                    correctIndices.push(i);
-                }
+                correctAnswers.push(choices[i].isCorrect); // true if has \True, false otherwise
             }
-            return correctIndices;
+            console.log('True-false correct answers:', correctAnswers);
+            return correctAnswers;
         } else {
             // For multiple-choice questions, return single correct index
             for (let i = 0; i < choices.length; i++) {
@@ -316,7 +324,7 @@ class LaTeXParser {
                     return i;
                 }
             }
-            return -1; // No correct answer found
+            return -1;
         }
     }
 
@@ -335,30 +343,31 @@ class LaTeXParser {
     }
 
     /**
-     * Process LaTeX math expressions for display
-     * @param {string} text - Text with LaTeX math
+     * Process LaTeX math expressions and preserve line breaks
+     * @param {string} text - Text to process
      * @returns {string} Processed text
      */
     processLatexMath(text) {
         if (!text) return '';
-
-        // Process images first
-        let processed = this.processImages(text);
-
-        // Convert common LaTeX commands to more readable format
-        return processed
-            // Fractions
-            .replace(/\\dfrac\{([^}]+)\}\{([^}]+)\}/g, '\\frac{$1}{$2}')
-            // Common symbols
-            .replace(/\\left\(/g, '(')
-            .replace(/\\right\)/g, ')')
-            .replace(/\\left\[/g, '[')
-            .replace(/\\right\]/g, ']')
-            .replace(/\\left\{/g, '{')
-            .replace(/\\right\}/g, '}')
-            // Clean up extra spaces
-            .replace(/\s+/g, ' ')
-            .trim();
+        
+        // Preserve line breaks by converting \n to <br>
+        let processed = text.replace(/\n/g, '<br>');
+        
+        // Process LaTeX math expressions
+        processed = processed.replace(/\$\$(.*?)\$\$/g, (match, content) => {
+            return `$$${content}$$`;
+        });
+        
+        processed = processed.replace(/\$(.*?)\$/g, (match, content) => {
+            return `$${content}$`;
+        });
+        
+        // Handle common LaTeX commands
+        processed = processed.replace(/\\dfrac\{([^}]+)\}\{([^}]+)\}/g, '\\frac{$1}{$2}');
+        processed = processed.replace(/\\left\(/g, '\\left(');
+        processed = processed.replace(/\\right\)/g, '\\right)');
+        
+        return processed;
     }
 
     /**
@@ -469,3 +478,8 @@ class LaTeXParser {
 
 // Export for use in other files
 window.LaTeXParser = LaTeXParser;
+
+
+
+
+
