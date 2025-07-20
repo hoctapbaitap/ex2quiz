@@ -645,8 +645,7 @@ class QuizApp {
         this.renderQuestionGrid();
         this.showQuestion(0);
         this.startTimer();
-    }
-
+        this.renderAllQuestions();
     /**
      * Show specific screen with null checks
      */
