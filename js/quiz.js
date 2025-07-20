@@ -645,6 +645,7 @@ class QuizApp {
         this.renderQuestionGrid();
         this.showQuestion(0);
         this.startTimer();
+        this.renderAllQuestions();
     }
 
     /**
@@ -1093,7 +1094,7 @@ class QuizApp {
     /**
      * Navigate to previous question
      */
-    prevQuestion() {
+    previousQuestion() {
         if (this.currentQuestionIndex > 0) {
             this.showQuestion(this.currentQuestionIndex - 1);
         }
@@ -1167,6 +1168,14 @@ class QuizApp {
     }
 
     /**
+     * Check if question is answered
+     */
+    isQuestionAnswered(index) {
+        const answer = this.userAnswers[index];
+        return answer !== null && answer !== undefined && answer !== '';
+    }
+
+    /**
      * Go to specific question
      */
     goToQuestion(index) {
@@ -1205,7 +1214,7 @@ class QuizApp {
         switch (e.key) {
             case 'ArrowLeft':
                 e.preventDefault();
-                this.prevQuestion();
+                this.previousQuestion();
                 break;
             case 'ArrowRight':
                 e.preventDefault();
@@ -1836,3 +1845,6 @@ class QuizApp {
 document.addEventListener('DOMContentLoaded', () => {
     window.quizApp = new QuizApp();
 });
+
+
+
