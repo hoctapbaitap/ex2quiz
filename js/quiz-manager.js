@@ -344,27 +344,30 @@ class QuizManager {
      * @param {string} quizId - Quiz ID
      * @returns {boolean} Success status
      */
-    deleteQuiz(quizId) {
+    async deleteQuiz(quizId) {
         if (this.useServerStorage) {
-            // Gọi API xóa quiz
-            return fetch(this.apiUrl + '?action=delete', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ quizId })
-            })
-            .then(res => {
-                if (!res.ok) throw new Error('Server delete failed');
-                return res.json();
-            })
-            .then(data => {
-                if (!data.success) throw new Error('Delete failed');
+            try {
+                const response = await fetch(this.apiUrl + '?action=delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ quizId })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                if (!data.success) {
+                    throw new Error('Delete failed on server');
+                }
+                
                 return true;
-            })
-            .catch(err => {
-                console.error('Delete on server failed, fallback local:', err);
+            } catch (error) {
+                console.error('Delete on server failed, fallback local:', error);
                 this.useServerStorage = false;
                 return this.deleteQuizLocal(quizId);
-            });
+            }
         } else {
             return this.deleteQuizLocal(quizId);
         }

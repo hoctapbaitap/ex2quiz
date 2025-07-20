@@ -87,53 +87,17 @@
         </div>
 
         <div class="quiz-content">
-            <!-- Single Question View -->
-            <div class="question-container" id="singleQuestionContainer">
-                <div class="question-header">
-                    <span class="question-number" id="currentQuestionNumber">Câu 1</span>
-                    <div class="question-navigation">
-                        <button id="prevQuestionBtn" class="btn btn-sm btn-secondary" disabled>
-                            <i class="fas fa-chevron-left"></i>
-                            Trước
-                        </button>
-                        <button id="nextQuestionBtn" class="btn btn-sm btn-primary">
-                            Sau
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="question-content">
-                    <div class="question-text" id="questionText">
-                        <!-- Question content will be loaded here -->
-                    </div>
-
-                    <div class="question-choices" id="questionChoices">
-                        <!-- Choices will be loaded here -->
-                    </div>
-                </div>
-            </div>
-
             <!-- All Questions View -->
-            <div class="all-questions-container" id="allQuestionsContainer" style="display: none;">
+            <div class="all-questions-container" id="allQuestionsContainer">
                 <div class="all-questions-header">
                     <h3>
                         <i class="fas fa-list"></i>
-                        Tất cả câu hỏi
+                        Danh sách câu hỏi
                     </h3>
-                    <p>Cuộn xuống để xem tất cả câu hỏi. Click vào đáp án để chọn.</p>
+                    <p>Làm bài theo thứ tự hoặc chọn câu bất kỳ. Click vào đáp án để chọn.</p>
                 </div>
                 <div class="all-questions-content" id="allQuestionsContent">
                     <!-- All questions will be loaded here -->
-                </div>
-            </div>
-
-            <div class="quiz-sidebar">
-                <div class="question-grid-container">
-                    <h4>Danh sách câu hỏi</h4>
-                    <div id="questionGrid" class="question-grid">
-                        <!-- Question grid items will be generated here -->
-                    </div>
                 </div>
             </div>
         </div>

@@ -506,7 +506,7 @@ Tính đạo hàm của hàm số $f(x) = x^3 + 2x^2 - 5x + 1$.
     /**
      * Delete quiz
      */
-    deleteQuiz(quizId) {
+    async deleteQuiz(quizId) {
         const quiz = this.quizManager.getQuiz(quizId);
         if (!quiz) {
             this.showToast('Không tìm thấy quiz', 'error');
@@ -514,9 +514,14 @@ Tính đạo hàm của hàm số $f(x) = x^3 + 2x^2 - 5x + 1$.
         }
 
         if (confirm(`Bạn có chắc muốn xóa quiz "${quiz.title}"?`)) {
-            this.quizManager.deleteQuiz(quizId);
-            this.loadQuizList();
-            this.showToast('Đã xóa quiz', 'success');
+            try {
+                await this.quizManager.deleteQuiz(quizId);
+                await this.loadQuizList();
+                this.showToast('Đã xóa quiz thành công', 'success');
+            } catch (error) {
+                console.error('Error deleting quiz:', error);
+                this.showToast('Lỗi xóa quiz: ' + error.message, 'error');
+            }
         }
     }
 
