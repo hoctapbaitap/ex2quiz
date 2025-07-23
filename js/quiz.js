@@ -1372,7 +1372,7 @@ class QuizApp {
             const userAnswer = this.userAnswers[index];
             let isCorrect = false;
             let score = 0;
-            let maxQuestionScore = 1; // Default 1 point per question
+            let maxQuestionScore = 0.25; // Default 1 point per question
             
             if (question.type === 'multiple-choice') {
                 if (userAnswer !== null && userAnswer !== undefined) {
@@ -1828,19 +1828,16 @@ class QuizApp {
         ];
     }
 
-    /**
-     * Shuffle array utility
-     */
-    shuffleArray(array) {
-        const shuffled = [...array];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        return shuffled;
+   }
+// Thêm hàm shuffleArray ở đầu file (hoặc vào class nếu muốn)
+function shuffleArray(array) {
+    const arr = array.slice();
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
     }
+    return arr;
 }
-
 // Initialize quiz app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.quizApp = new QuizApp();
