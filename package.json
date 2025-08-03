@@ -1,0 +1,39 @@
+{
+  "name": "latex-quiz-converter",
+  "version": "1.0.0",
+  "description": "Ứng dụng web chuyển đổi LaTeX format ex-test thành quiz online tương tác",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve . -p 3000",
+    "dev": "npx serve . -p 3000 --live",
+    "build": "echo 'No build step required for static web app'",
+    "test": "echo 'No tests specified'",
+    "serve": "python -m http.server 8000 || python3 -m http.server 8000"
+  },
+  "keywords": [
+    "latex",
+    "quiz",
+    "education",
+    "math",
+    "converter",
+    "vietnamese"
+  ],
+  "author": "AI Assistant",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/username/latex-quiz-converter.git"
+  },
+  "homepage": "https://username.github.io/latex-quiz-converter",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
